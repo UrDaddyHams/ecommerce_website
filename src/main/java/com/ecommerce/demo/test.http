@@ -1,0 +1,6 @@
+POST http://localhost:8081/api/carts
+Content-Type: application/json
+
+{
+  "idCustomer": 1
+}
