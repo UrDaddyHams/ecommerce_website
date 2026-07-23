@@ -24,7 +24,6 @@ public class CartItem {
 
     public CartItem() {}
 
-    // Getters and Setters
     public Long getIdCartItem() { return idCartItem; }
     public void setIdCartItem(Long idCartItem) { this.idCartItem = idCartItem; }
 

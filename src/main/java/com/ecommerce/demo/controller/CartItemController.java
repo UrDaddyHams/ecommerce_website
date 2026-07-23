@@ -26,8 +26,7 @@ public class CartItemController {
 
     @PostMapping
     public ResponseEntity<CartItem> addItemToCart(@RequestBody CartItemRequest request) {
-        // Change getUserId() -> request.getIdCart()
-        // Change getProductId() -> request.getIdProduct()
+
         CartItem newItem = cartItemService.addItemToCart(request);
         return ResponseEntity.ok(newItem);
     }
