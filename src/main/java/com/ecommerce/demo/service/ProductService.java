@@ -2,7 +2,10 @@ package com.ecommerce.demo.service;
 
 import com.ecommerce.demo.model.Product;
 import com.ecommerce.demo.repository.ProductRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -23,21 +26,59 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    @Transactional
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
 
-    public boolean updateStock(Long idProduct, Integer quantity) {
-        Optional<Product> productOpt = productRepository.findById(idProduct);
-        if (productOpt.isPresent()) {
-            Product product = productOpt.get();
+    @Transactional
+    public Optional<Product> updateProduct(Long id, Product productDetails) {
+        return productRepository.findById(id)
+                .map(existingProduct -> {
+                    if (productDetails.getProductName() != null) {
+                        existingProduct.setProductName(productDetails.getProductName());
+                    }
+                    if (productDetails.getPrice() != null) {
+                        existingProduct.setPrice(productDetails.getPrice());
+                    }
+                    if (productDetails.getStock() != null) {
+                        existingProduct.setStock(productDetails.getStock());
+                    }
+                    if (productDetails.getDescription() != null) {
+                        existingProduct.setDescription(productDetails.getDescription());
+                    }
+                    if (productDetails.getIdCategory() != null) {
+                        existingProduct.setIdCategory(productDetails.getIdCategory());
+                    }
+                    if (productDetails.getIdSupplier() != null) {
+                        existingProduct.setIdSupplier(productDetails.getIdSupplier());
+                    }
+                    return productRepository.save(existingProduct);
+                });
+    }
 
-            // This line now perfectly matches your model's setter!
-            product.setStock(quantity);
+    @Transactional
+    public boolean updateStock(Long id, Integer quantity) {
+        return productRepository.findById(id)
+                .map(product -> {
+                    product.setStock(quantity);
+                    productRepository.save(product);
+                    return true;
+                })
+                .orElse(false);
+    }
 
-            productRepository.save(product);
-            return true;
+    @Transactional
+    public boolean deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            return false;
         }
-        return false;
+        try {
+            productRepository.deleteById(id);
+            return true;
+        } catch (DataIntegrityViolationException e) {
+
+            return false;
+        }
     }
 }

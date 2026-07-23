@@ -35,4 +35,11 @@ public class OrderController {
         Order savedOrder = orderService.placeOrder(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order orderDetails) {
+        return orderService.updateOrder(id, orderDetails)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

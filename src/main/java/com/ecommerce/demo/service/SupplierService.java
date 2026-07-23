@@ -2,7 +2,9 @@ package com.ecommerce.demo.service;
 
 import com.ecommerce.demo.model.Supplier;
 import com.ecommerce.demo.repository.SupplierRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +17,6 @@ public class SupplierService {
         this.supplierRepository = supplierRepository;
     }
 
-    // This is the method the compiler is looking for!
     public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
     }
@@ -28,10 +29,31 @@ public class SupplierService {
         return supplierRepository.save(supplier);
     }
 
+    public Optional<Supplier> updateSupplier(Long id, Supplier supplierDetails) {
+        return supplierRepository.findById(id)
+                .map(existingSupplier -> {
+                    if (supplierDetails.getSupplierName() != null) {
+                        existingSupplier.setSupplierName(supplierDetails.getSupplierName());
+                    }
+                    if (supplierDetails.getPhone() != null) {
+                        existingSupplier.setPhone(supplierDetails.getPhone());
+                    }
+                    if (supplierDetails.getEmail() != null) {
+                        existingSupplier.setEmail(supplierDetails.getEmail());
+                    }
+                    return supplierRepository.save(existingSupplier);
+                });
+    }
+
     public boolean deleteSupplier(Long id) {
         if (supplierRepository.existsById(id)) {
-            supplierRepository.deleteById(id);
-            return true;
+            try {
+                supplierRepository.deleteById(id);
+                return true;
+            } catch (DataIntegrityViolationException e) {
+
+                return false;
+            }
         }
         return false;
     }

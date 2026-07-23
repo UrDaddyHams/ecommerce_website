@@ -28,4 +28,12 @@ public class ReviewController {
         Review savedReview = reviewService.saveReview(review);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReview);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
+        if (reviewService.deleteReview(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

@@ -18,9 +18,21 @@ public class AddressController {
         this.addressService = addressService;
     }
 
+    @GetMapping
+    public List<Address> getAllAddresses() {
+        return addressService.getAllAddresses();
+    }
+
     @GetMapping("/customer/{idCustomer}")
     public List<Address> getAddressesByCustomer(@PathVariable Long idCustomer) {
         return addressService.getAddressesByCustomerId(idCustomer);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Address> getAddressById(@PathVariable Long id) {
+        return addressService.getAddressById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -29,9 +41,11 @@ public class AddressController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAddress);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
-        addressService.deleteAddress(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address addressDetails) {
+        return addressService.updateAddress(id, addressDetails)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 }

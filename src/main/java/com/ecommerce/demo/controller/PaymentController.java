@@ -21,4 +21,25 @@ public class PaymentController {
         Payment processedPayment = paymentService.processPayment(payment);
         return ResponseEntity.status(HttpStatus.CREATED).body(processedPayment);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
+        return paymentService.getPaymentById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/order/{idOrder}")
+    public ResponseEntity<Payment> getPaymentByOrderId(@PathVariable Long idOrder) {
+        return paymentService.getPaymentByOrderId(idOrder)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment paymentDetails) {
+        return paymentService.updatePayment(id, paymentDetails)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

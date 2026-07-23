@@ -24,12 +24,24 @@ public class Category {
         this.description = description;
     }
 
-    public Long getIdCategory() { return idCategory; }
-    public void setIdCategory(Long idCategory) { this.idCategory = idCategory; }
+    public Long getIdCategory() {
+        return idCategory; }
 
-    public String getCategoryName() { return categoryName; }
-    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
+    public void setIdCategory(Long idCategory) {
+        this.idCategory = idCategory;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getCategoryName() {
+        return categoryName;
+    }
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

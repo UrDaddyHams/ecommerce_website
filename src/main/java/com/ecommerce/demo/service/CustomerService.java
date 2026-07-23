@@ -6,6 +6,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
+//serves as the middle man bw api endpoints and database
+// data ko verify aur wrap karta hai
+
+//registers this class as a bean managed by spring
 @Service
 public class CustomerService {
 
@@ -19,18 +24,19 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    //container object for methods that might not find a match so it prevents null pointer exception crashes
     public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);
     }
 
     public Customer registerCustomer(Customer customer) {
-        // Business logic rule: profile defaults could go here
+        // business logic rule: profile defaults could go here
         return customerRepository.save(customer);
     }
 
     public java.util.Optional<Customer> updateCustomer(Long id, Customer customerDetails) {
         return customerRepository.findById(id)
-                .map(existingCustomer -> {
+                .map(existingCustomer -> {  //.map means inside update, it fetches the existing entity, overwrites its fields with the incoming details and saves it back to mysql
                     existingCustomer.setFirstName(customerDetails.getFirstName());
                     existingCustomer.setLastName(customerDetails.getLastName());
                     existingCustomer.setEmail(customerDetails.getEmail());
@@ -43,6 +49,7 @@ public class CustomerService {
     }
 
     public boolean deleteCustomer(Long id) {
+        //exists by id means it checks if a row exists in MySQL prior to deletion, this prevents db to throw errors if user enters invalid id
         if (customerRepository.existsById(id)) {
             customerRepository.deleteById(id);
             return true;

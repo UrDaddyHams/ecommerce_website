@@ -8,5 +8,8 @@ import java.util.List;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    List<CartItem> findByIdCart(Long idCart);
+
+    // Spring Data JPA drills into Cart -> idCart automatically
+    List<CartItem> findByCart_IdCart(Long idCart);
+
 }

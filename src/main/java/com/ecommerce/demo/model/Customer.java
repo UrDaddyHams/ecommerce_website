@@ -2,22 +2,24 @@ package com.ecommerce.demo.model;
 
 import jakarta.persistence.*;
 
+//marks java class as a database entity
 @Entity
-@Table(name = "customer")
+@Table(name = "customer") //maps the class to a specific table name in mysql
 public class Customer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_customer")
+    @Id //marks the field as a primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //tells mysql to use auto increment for generation id values
+    @Column(name = "id_customer") //customizes the database column constraints
     private Long idCustomer;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false) //nullable = false: generatees not null in sql
+    //and name = "first_name" maps camelCase java fields(firstName) to snake_case mysql columns(first_name)
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true) //unique= true adds a unique index constraint
     private String email;
 
     @Column(name = "phone")

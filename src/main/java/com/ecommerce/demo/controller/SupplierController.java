@@ -36,6 +36,13 @@ public class SupplierController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSupplier);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Supplier> updateSupplier(@PathVariable Long id, @RequestBody Supplier supplierDetails) {
+        return supplierService.updateSupplier(id, supplierDetails)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSupplier(@PathVariable Long id) {
         if (supplierService.deleteSupplier(id)) {

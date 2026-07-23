@@ -16,12 +16,12 @@ public class ReviewService {
     }
 
     public List<Review> getReviewsByProductId(Long idProduct) {
-        // Assuming your repository has a custom finder method for product IDs
+
         return reviewRepository.findByIdProduct(idProduct);
     }
 
     public Review saveReview(Review review) {
-        // Business logic rule: you could validate rating limits (1-5 stars) here later
+
         return reviewRepository.save(review);
     }
 
@@ -29,7 +29,8 @@ public class ReviewService {
         return reviewRepository.findById(id);
     }
 
-    public void deleteReview(Long id) {
+    public boolean deleteReview(Long id) {
         reviewRepository.deleteById(id);
+        return false;
     }
 }

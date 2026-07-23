@@ -27,13 +27,20 @@ public class CategoryController {
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
         return categoryService.getCategoryById(id)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
         Category savedCategory = categoryService.saveCategory(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category categoryDetails) {
+        return categoryService.updateCategory(id, categoryDetails)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

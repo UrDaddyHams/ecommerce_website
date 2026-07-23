@@ -1,5 +1,6 @@
 package com.ecommerce.demo.controller;
 
+import com.ecommerce.demo.dto.CartItemRequest;
 import com.ecommerce.demo.model.CartItem;
 import com.ecommerce.demo.service.CartItemService;
 import org.springframework.http.HttpStatus;
@@ -24,14 +25,25 @@ public class CartItemController {
     }
 
     @PostMapping
-    public ResponseEntity<CartItem> addItemToCart(@RequestBody CartItem cartItem) {
-        CartItem savedItem = cartItemService.addItemToCart(cartItem);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedItem);
+    public ResponseEntity<CartItem> addItemToCart(@RequestBody CartItemRequest request) {
+        // Change getUserId() -> request.getIdCart()
+        // Change getProductId() -> request.getIdProduct()
+        CartItem newItem = cartItemService.addItemToCart(request);
+        return ResponseEntity.ok(newItem);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CartItem> updateCartItem(@PathVariable Long id, @RequestBody CartItemRequest request) {
+        return cartItemService.updateCartItem(id, request)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeItem(@PathVariable Long id) {
-        cartItemService.removeItem(id);
-        return ResponseEntity.noContent().build();
+        if (cartItemService.removeItem(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

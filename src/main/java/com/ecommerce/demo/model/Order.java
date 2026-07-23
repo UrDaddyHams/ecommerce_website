@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "order_table") // 'order' is a reserved keyword in SQL
+@Table(name = "`order`")
 public class Order {
 
     @Id
@@ -37,6 +37,7 @@ public class Order {
         this.idAddress = idAddress;
     }
 
+
     public Long getIdOrder() { return idOrder; }
     public void setIdOrder(Long idOrder) { this.idOrder = idOrder; }
 
@@ -52,6 +53,7 @@ public class Order {
     public Long getIdCustomer() { return idCustomer; }
     public void setIdCustomer(Long idCustomer) { this.idCustomer = idCustomer; }
 
+    // Add these two if missing:
     public Long getIdAddress() { return idAddress; }
     public void setIdAddress(Long idAddress) { this.idAddress = idAddress; }
 }

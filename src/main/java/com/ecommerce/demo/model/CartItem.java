@@ -14,29 +14,27 @@ public class CartItem {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "id_cart")
-    private Long idCart;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cart")
+    private Cart cart;
 
-    @Column(name = "id_product")
-    private Long idProduct;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_product")
+    private Product product;
 
     public CartItem() {}
 
-    public CartItem(Integer quantity, Long idCart, Long idProduct) {
-        this.quantity = quantity;
-        this.idCart = idCart;
-        this.idProduct = idProduct;
-    }
-
+    // Getters and Setters
     public Long getIdCartItem() { return idCartItem; }
     public void setIdCartItem(Long idCartItem) { this.idCartItem = idCartItem; }
 
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-    public Long getIdCart() { return idCart; }
-    public void setIdCart(Long idCart) { this.idCart = idCart; }
+    // This makes the .setCart(this) in Cart.java turn green!
+    public Cart getCart() { return cart; }
+    public void setCart(Cart cart) { this.cart = cart; }
 
-    public Long getIdProduct() { return idProduct; }
-    public void setIdProduct(Long idProduct) { this.idProduct = idProduct; }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
 }

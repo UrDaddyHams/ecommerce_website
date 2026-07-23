@@ -36,10 +36,25 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
+        return productService.updateProduct(id, productDetails)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/{id}/stock")
     public ResponseEntity<Void> updateStock(@PathVariable Long id, @RequestParam Integer quantity) {
         if (productService.updateStock(id, quantity)) {
             return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        if (productService.deleteProduct(id)) {
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }

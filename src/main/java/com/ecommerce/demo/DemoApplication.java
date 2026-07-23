@@ -34,11 +34,6 @@ public class DemoApplication {
 		return args -> {
 			System.out.println("Starting database insertion test...");
 
-			Customer customer = customerRepo.save(new Customer("lil", "lilrl", "low@mail.com", "3349787545", "4ol123"));
-
-			Cart cart = cartRepo.save(new Cart(LocalDateTime.now(), customer.getIdCustomer()));
-
-			System.out.println(">>> SUCCESS: Customer created with ID " + customer.getIdCustomer() + " and Cart created with ID " + cart.getIdCart());
 		};
 	}
 }
