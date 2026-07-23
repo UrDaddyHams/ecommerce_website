@@ -14,7 +14,6 @@ public class CartController {
 
     private final CartService cartService;
 
-    // Inject CartService instead of CartRepository
     public CartController(CartService cartService) {
         this.cartService = cartService;
     }

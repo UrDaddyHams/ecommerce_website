@@ -51,7 +51,6 @@ public class AddressService {
                 addressRepository.deleteById(id);
                 return true;
             } catch (org.springframework.dao.DataIntegrityViolationException e) {
-                // Cannot delete because an Order depends on this Address
                 return false;
             }
         }

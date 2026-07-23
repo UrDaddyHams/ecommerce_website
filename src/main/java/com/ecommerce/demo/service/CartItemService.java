@@ -37,7 +37,7 @@ public class CartItemService {
 
     @Transactional
     public CartItem addItemToCart(CartItemRequest request) {
-        // Prevent Spring Data JPA's findById(null) crash by validating early
+
         if (request == null) {
             throw new IllegalArgumentException("CartItemRequest body cannot be null");
         }
