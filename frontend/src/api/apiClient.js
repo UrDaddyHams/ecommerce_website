@@ -1,7 +1,7 @@
 import axios from 'axios';  //javascript library for sending http requests from web browsers
 
 const API = axios.create({    //sets up a reusable http client instance named API pointing to a base url of /api so any request like .get(/products) automatically hits /api/products ykwim
-    baseURL: '/api',
+    baseURL: 'http://<your-ec2-public-ip>:2021/api',
     headers: { 'Content-Type': 'application/json' },
 });
 
