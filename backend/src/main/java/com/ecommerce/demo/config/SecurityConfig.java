@@ -69,7 +69,6 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
-                        // Strictly admin-only routes
                         .requestMatchers(
                                 "/api/suppliers/**",
                                 "/api/admin/**"
