@@ -13,7 +13,6 @@ export default function OrderHistory({ customerId, onNavigate }) {
     try {
       const res = await getOrdersByCustomer(customerId);
       const data = res.data || [];
-      // Sort newest first
       data.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
       setOrders(data);
     } catch (err) {

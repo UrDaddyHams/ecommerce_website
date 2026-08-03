@@ -1,7 +1,6 @@
 export default function Navbar({ activePage, onNavigate, cartCount, username, onLogout, userRole }) {
   const isAdmin = userRole === 'ROLE_ADMIN' || userRole === 'ADMIN';
 
-  // Customer navigation links
   const links = [
     { key: 'products', label: 'Products', icon: '🏪' },
     { key: 'cart', label: 'Cart', icon: '🛒' },

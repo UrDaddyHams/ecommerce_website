@@ -126,7 +126,7 @@ export default function ProfileView() {
                 }] : []
             };
 
-            await axios.put(`http://localhost:8081/api/customers/me`, payload, {
+            await axios.put(`http://localhost:2021/api/customers/me`, payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
