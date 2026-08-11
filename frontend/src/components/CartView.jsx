@@ -77,7 +77,7 @@ export default function CartView({ cartId, userId, onCartUpdate, onNavigate }) {
       // Fetch customer data robustly using local ID or /me endpoint fallback
       if (customerId && customerId !== 'undefined' && customerId !== 'null') {
         try {
-          const customerRes = await axios.get(`http://localhost:2021/api/customers/${customerId}`, { headers });
+          const customerRes = await axios.get(`/api/customers/${customerId}`, { headers });
           customerData = customerRes.data;
         } catch (e) {
           console.warn("Failed fetching by customerId, trying /me fallback...");
@@ -85,7 +85,7 @@ export default function CartView({ cartId, userId, onCartUpdate, onNavigate }) {
       }
 
       if (!customerData) {
-        const meRes = await axios.get(`http://localhost:2021/api/customers/me`, { headers });
+        const meRes = await axios.get(`/api/customers/me`, { headers });
         customerData = meRes.data;
       }
 

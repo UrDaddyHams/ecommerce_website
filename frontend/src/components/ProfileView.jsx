@@ -38,7 +38,7 @@ export default function ProfileView() {
 
             if (customerId && customerId !== 'undefined' && customerId !== 'null') {
                 try {
-                    const res = await axios.get(`http://localhost:8081/api/customers/${customerId}`, { headers });
+                    const res = await axios.get(`/api/customers/${customerId}`, { headers });
                     customerData = res.data;
                 } catch (e) {
                     // Fallback
@@ -47,10 +47,10 @@ export default function ProfileView() {
 
             if (!customerData) {
                 try {
-                    const res = await axios.get(`http://localhost:8081/api/customers/me`, { headers });
+                    const res = await axios.get(`/api/customers/me`, { headers });
                     customerData = res.data;
                 } catch (e) {
-                    const allRes = await axios.get(`http://localhost:8081/api/customers`, { headers });
+                    const allRes = await axios.get(`/api/customers`, { headers });
                     const customers = allRes.data || [];
                     customerData = customers.find(c =>
                         c.username === username ||
@@ -126,7 +126,7 @@ export default function ProfileView() {
                 }] : []
             };
 
-            await axios.put(`http://localhost:2021/api/customers/me`, payload, {
+            await axios.put(`/api/customers/me`, payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 

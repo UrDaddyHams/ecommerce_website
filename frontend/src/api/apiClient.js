@@ -1,7 +1,7 @@
 import axios from 'axios';  //javascript library for sending http requests from web browsers
 
 const API = axios.create({
-    baseURL: 'http://16.192.160.63:2021/api',
+    baseURL: '/api',
     headers: { 'Content-Type': 'application/json' },
 });
 
