@@ -9,6 +9,7 @@ import ShipmentTracking from './components/ShipmentTracking';
 import ProfileView from './components/ProfileView';
 import AdminDashboard from './components/AdminDashboard';
 import { getAllCarts, createCart, getCartItems } from './api/apiClient';
+import headerLogo from "./assets/book-attic-header.png";
 
 const DEFAULT_CUSTOMER_ID = 1;
 
@@ -31,7 +32,7 @@ function AppContent() {
     };
     window.addEventListener('auth-expired', handler);
     return () => window.removeEventListener('auth-expired', handler);
-  }, [], );
+  }, []);
 
   const initCart = useCallback(async () => {
     if (userRole === 'ROLE_ADMIN') return;
@@ -135,6 +136,10 @@ function AppContent() {
 
   return (
       <div className="app">
+
+        <div className="full-width-banner">
+          <img src={headerLogo} alt="Book Attic Header" />
+        </div>
         <Navbar
             activePage={activePage}
             onNavigate={setActivePage}
@@ -143,7 +148,11 @@ function AppContent() {
             onLogout={handleLogout}
             userRole={userRole}
         />
-        <main className="main-content">{renderPage()}</main>
+
+
+        <main className="main-content">
+          {renderPage()}
+        </main>
       </div>
   );
 }

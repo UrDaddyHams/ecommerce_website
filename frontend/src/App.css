@@ -1,55 +1,23 @@
-/* ═══════════════════════════════════════════════════════════
-   NovaMart — Premium Light Theme Design System
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   READERS — ORGANIC STORYBOOK THEME (EXPLICIT MANUAL COLORS)
+   ═════════════════════════════════════════════════════════════════════════ */
 
-/* ─── CSS Variables ─── */
+/* ─── Global Variables (Spacing, Radii, Shadows, & Animations only) ─── */
 :root {
-  --bg-primary: #f8f9fc;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f1f3f8;
-  --bg-accent: #eef2ff;
-
-  --text-primary: #1a1d2e;
-  --text-secondary: #5a5f7a;
-  --text-tertiary: #8b90a7;
-  --text-inverse: #ffffff;
-
-  --brand-primary: #4f46e5;
-  --brand-secondary: #7c3aed;
-  --brand-gradient: linear-gradient(135deg, #4f46e5, #7c3aed);
-  --brand-light: #eef2ff;
-
-  --accent-success: #059669;
-  --accent-success-bg: #ecfdf5;
-  --accent-warning: #d97706;
-  --accent-warning-bg: #fffbeb;
-  --accent-danger: #dc2626;
-  --accent-danger-bg: #fef2f2;
-  --accent-info: #2563eb;
-  --accent-info-bg: #eff6ff;
-
-  --border-color: #e2e5f0;
-  --border-light: #f0f1f6;
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.1), 0 8px 20px rgba(0, 0, 0, 0.06);
-
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
   --radius-full: 9999px;
 
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.25s ease;
-  --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ─── Reset & Base ─── */
+/* ─── Reset & Base Settings ─── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -61,10 +29,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 🟢 CHANGES MAIN WEBSITE BACKGROUND & DEFAULT FONT COLOR */
 body {
   font-family: var(--font-family);
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  background: #6a7a53; /* Main page background color */
+  color: #f4e187;      /* Default main text color */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -73,12 +42,12 @@ body {
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+::-webkit-scrollbar-thumb { background: #2e3a26; border-radius: 3px; /* Scrollbar handle color */ }
+::-webkit-scrollbar-thumb:hover { background: #6b9354; /* Scrollbar hover color */ }
 
-/* ═══════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════════════════════════
    LAYOUT
-   ═══════════════════════════════════════════════════════════ */
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .app {
   min-height: 100vh;
@@ -88,28 +57,29 @@ body {
 
 .main-content {
   flex: 1;
-  padding: 2rem 2rem 3rem;
+  padding: 0 2rem 3rem; /* Changed top padding from 2rem to 0 */
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  margin-top: 72px;
+  margin-top: 0;       /* Changed margin-top from 72px to 0 */
 }
 
-/* ═══════════════════════════════════════════════════════════
-   NAVBAR
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   NAVBAR & TOP NAVIGATION
+   ═════════════════════════════════════════════════════════════════════════ */
 
+/* 🟢 CHANGES TOP NAVBAR BAR BACKGROUND & BORDER */
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
+  /* This pulls the navbar out of the document flow so it takes up zero space */
+  position: absolute;
+  top: 10px; /* Adjust this to place the menu button perfectly */
+  left: 10px;
+  width: 100%;
+  background: transparent !important; /* Removes any leftover beige background */
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
+  z-index: 50; /* Ensures the menu button stays on top of the banner */
 }
 
 .navbar-inner {
@@ -131,6 +101,13 @@ body {
   transition: transform var(--transition-fast);
 }
 
+.navbar-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
 .navbar-brand:hover {
   transform: scale(1.03);
 }
@@ -139,10 +116,11 @@ body {
   font-size: 1.6rem;
 }
 
+/* 🟢 CHANGES NAVBAR LOGO TEXT GRADIENT */
 .brand-text {
   font-size: 1.35rem;
   font-weight: 800;
-  background: var(--brand-gradient);
+  background: linear-gradient(135deg, #546B41, #4a5e3b); /* Logo text gradient colors */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -155,6 +133,7 @@ body {
   gap: 0.25rem;
 }
 
+/* 🟢 CHANGES NAVBAR LINK COLORS & HOVER BACKGROUNDS */
 .nav-link {
   display: flex;
   align-items: center;
@@ -162,7 +141,7 @@ body {
   padding: 0.5rem 1rem;
   border: none;
   background: none;
-  color: var(--text-secondary);
+  color: #2f4025; /* Navbar link text color */
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -173,13 +152,13 @@ body {
 }
 
 .nav-link:hover {
-  color: var(--brand-primary);
-  background: var(--brand-light);
+  color: #556c43;        /* Nav link text color on hover */
+  background: #566742;   /* Nav link background color on hover */
 }
 
 .nav-link.active {
-  color: var(--brand-primary);
-  background: var(--brand-light);
+  color: #122304;        /* Active nav link text color */
+  background: #0c1202;   /* Active nav link background color */
   font-weight: 600;
 }
 
@@ -190,7 +169,7 @@ body {
   transform: translateX(-50%);
   width: 24px;
   height: 3px;
-  background: var(--brand-gradient);
+  background: linear-gradient(135deg, #395028, #1c2712); /* Active indicator bar gradient */
   border-radius: 2px;
   animation: slideIn 0.25s ease;
 }
@@ -208,9 +187,10 @@ body {
   font-size: 0.875rem;
 }
 
+/* 🟢 CHANGES CART BADGE NOTIFICATION CIRCLE COLOR */
 .cart-badge {
-  background: var(--accent-danger);
-  color: white;
+  background: #73773c; /* Cart badge background color */
+  color: #FFFFFF;      /* Cart badge number text color */
   font-size: 0.65rem;
   font-weight: 700;
   min-width: 18px;
@@ -235,12 +215,13 @@ body {
   gap: 0.75rem;
 }
 
+/* 🟢 CHANGES USER PROFILE AVATAR CIRCLE BACKGROUND */
 .user-avatar {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-full);
-  background: var(--brand-gradient);
-  color: white;
+  background: linear-gradient(135deg, #546B41, #3E4F30); /* Avatar gradient background */
+  color: #e8ddbf; /* Avatar initial letter color */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -251,21 +232,21 @@ body {
 .user-name {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #3b4e2f; /* Top navbar username text color */
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════════════════════════
    BUTTONS
-   ═══════════════════════════════════════════════════════════ */
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.6rem 1.25rem;
+  padding: 0.65rem 1.5rem;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
   font-family: inherit;
   font-size: 0.875rem;
   font-weight: 600;
@@ -280,14 +261,16 @@ body {
   cursor: not-allowed;
 }
 
+/* 🟢 CHANGES PRIMARY ACTION BUTTONS (e.g. Submit, Checkout) */
 .btn-primary {
-  background: var(--brand-gradient);
-  color: white;
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+  background: #556c43; /* Primary button background */
+  color: #ffecd8;      /* Primary button text color */
+  box-shadow: 0 4px 14px rgb(78 97 61 / 0.25);
 }
 
 .btn-primary:hover:not(:disabled) {
-  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.35);
+  background: #3E4F30; /* Primary button hover background */
+  box-shadow: 0 6px 20px rgba(84, 107, 65, 0.35);
   transform: translateY(-1px);
 }
 
@@ -295,17 +278,23 @@ body {
   transform: translateY(0);
 }
 
+/* 🟢 CHANGES OUTLINED / GHOST BUTTONS (e.g. Logout, Cancel) */
 .btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  background: #d3c698;
+  color: #3b4e2f;            /* Ghost button text color */
+  border: 1px solid #493c2a; /* Ghost button border color */
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  border-color: var(--text-tertiary);
+  background: #666a49;       /* Ghost button hover background */
+  color: #ffebcf;            /* Ghost button hover text color */
+  border-color: #2d4023;     /* Ghost button hover border color */
 }
+
+.btn-ghost:active:not(:disabled) {
+  color: #FFFFFF; /* Put your new font color here! */
+}
+
 
 .btn-sm {
   padding: 0.35rem 0.75rem;
@@ -319,7 +308,7 @@ body {
 .btn-link {
   background: none;
   border: none;
-  color: var(--brand-primary);
+  color: #556c43; /* Text link button color */
   cursor: pointer;
   font-family: inherit;
   font-size: 0.875rem;
@@ -332,12 +321,12 @@ body {
   text-decoration: underline;
 }
 
-/* ─── Spinner ─── */
+/* Spinner colors */
 .spinner {
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border-top-color: #FFFFFF;
   border-radius: 50%;
   display: inline-block;
   animation: spin 0.6s linear infinite;
@@ -346,8 +335,8 @@ body {
 .spinner-lg {
   width: 40px;
   height: 40px;
-  border: 3px solid var(--border-color);
-  border-top-color: var(--brand-primary);
+  border: 3px solid #f4e4a8;
+  border-top-color: #38472c;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -356,9 +345,9 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   BADGES
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   BADGES & STATUS PILLS
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .badge {
   display: inline-flex;
@@ -371,15 +360,16 @@ body {
   text-transform: uppercase;
 }
 
-.badge-success, .status-delivered { background: var(--accent-success-bg); color: var(--accent-success); }
-.badge-warning, .status-processing { background: var(--accent-warning-bg); color: var(--accent-warning); }
-.badge-danger { background: var(--accent-danger-bg); color: var(--accent-danger); }
-.badge-info, .status-shipped, .status-transit { background: var(--accent-info-bg); color: var(--accent-info); }
-.badge-default { background: var(--bg-tertiary); color: var(--text-secondary); }
+/* 🟢 CHANGES ORDER/SHIPMENT STATUS BADGES (Success, Warning, Danger, Info) */
+.badge-success, .status-delivered { background: #EBF0E5; color: #d3edbd; }
+.badge-warning, .status-processing { background: #677852; color: #efd6af; }
+.badge-danger { background: #FDF2F0; color: #73773c; }
+.badge-info, .status-shipped, .status-transit { background: #F1F5EC; color: #e3f4c6; }
+.badge-default { background: #ecd9a5; color: #610110; }
 
-/* ═══════════════════════════════════════════════════════════
-   PAGE STRUCTURE
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   PAGE STRUCTURE & HEADERS
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .page-content {
   animation: fadeUp 0.35s ease;
@@ -397,20 +387,22 @@ body {
   margin-bottom: 1.5rem;
 }
 
+/* 🟢 CHANGES MAIN PAGE TITLES (e.g. "Order History", "Products") */
 .page-header h1 {
   font-size: 1.75rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: #ffef9a; /* Main page title font color */
   letter-spacing: -0.5px;
 }
 
+/* 🟢 CHANGES SUBTITLES & DESCRIPTIONS UNDER PAGE TITLES */
 .subtitle {
   font-size: 0.9rem;
-  color: var(--text-tertiary);
+  color: #25331c; /* Subtitle text color */
   margin-top: 0.15rem;
 }
 
-/* ─── States ─── */
+/* Empty & Loading states */
 .loading-state, .empty-state {
   display: flex;
   flex-direction: column;
@@ -428,31 +420,31 @@ body {
 
 .empty-state h3 {
   font-size: 1.2rem;
-  color: var(--text-primary);
+  color: #fff3ad; /* Empty state header text color */
   margin-bottom: 0.35rem;
 }
 
 .empty-state p {
-  color: var(--text-tertiary);
+  color: #364c29; /* Empty state description text color */
   margin-bottom: 1.25rem;
   font-size: 0.9rem;
 }
 
 .loading-state p {
   margin-top: 1rem;
-  color: var(--text-tertiary);
+  color: #fff5c0; /* Loading text color */
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════════════════════════
    LOGIN PAGE
-   ═══════════════════════════════════════════════════════════ */
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-primary);
+  background: #576544; /* Login page outer background color */
   position: relative;
   overflow: hidden;
 }
@@ -474,7 +466,7 @@ body {
 .shape-1 {
   width: 500px;
   height: 500px;
-  background: var(--brand-primary);
+  background: #556c43; /* Background floating shape 1 color */
   top: -150px;
   right: -100px;
   animation: float1 20s ease-in-out infinite;
@@ -483,7 +475,7 @@ body {
 .shape-2 {
   width: 400px;
   height: 400px;
-  background: var(--brand-secondary);
+  background: #3E4F30; /* Background floating shape 2 color */
   bottom: -100px;
   left: -80px;
   animation: float2 25s ease-in-out infinite;
@@ -492,7 +484,7 @@ body {
 .shape-3 {
   width: 300px;
   height: 300px;
-  background: var(--accent-info);
+  background: #99AD7A; /* Background floating shape 3 color */
   top: 40%;
   left: 50%;
   animation: float3 18s ease-in-out infinite;
@@ -502,15 +494,16 @@ body {
 @keyframes float2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -40px); } }
 @keyframes float3 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-20px, -30px); } }
 
+/* 🟢 CHANGES LOGIN CARD BOX BACKGROUND & BORDER */
 .login-card {
   position: relative;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background: #efdbb9;        /* Login card background color */
+  border: 1px solid #504637;  /* Login card border color */
   border-radius: var(--radius-xl);
   padding: 2.5rem;
   width: 100%;
   max-width: 440px;
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 24px 64px rgba(84, 107, 65, 0.12);
   animation: cardAppear 0.5s ease;
 }
 
@@ -529,10 +522,11 @@ body {
   margin-bottom: 0.5rem;
 }
 
+/* 🟢 CHANGES LOGIN TITLE GRADIENT */
 .login-header h1 {
   font-size: 1.75rem;
   font-weight: 800;
-  background: var(--brand-gradient);
+  background: linear-gradient(135deg, #546B41, #3E4F30); /* Login header text gradient */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -540,7 +534,7 @@ body {
 }
 
 .login-header p {
-  color: var(--text-tertiary);
+  color: #6c9555; /* Login header subtitle color */
   font-size: 0.9rem;
   margin-top: 0.25rem;
 }
@@ -557,30 +551,32 @@ body {
   gap: 0.35rem;
 }
 
+/* 🟢 CHANGES FORM INPUT FIELD LABELS */
 .input-group label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #6a7a50; /* Input label text color */
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
+/* 🟢 CHANGES FORM INPUT BOXES, TEXTAREAS, & SELECT DROPDOWNS */
 .input-group input, .input-group textarea, select {
   padding: 0.7rem 0.9rem;
-  border: 1.5px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  border: 1.5px solid #8e7b60; /* Input field border color */
+  border-radius: var(--radius-md);
   font-family: inherit;
   font-size: 0.9rem;
-  color: var(--text-primary);
-  background: var(--bg-primary);
+  color: #f4e187;              /* Input text font color */
+  background: #e4d0ad;         /* Input field background color */
   transition: all var(--transition-fast);
   outline: none;
 }
 
 .input-group input:focus, .input-group textarea:focus, select:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-  background: var(--bg-secondary);
+  border-color: #556c43; /* Input border color when focused */
+  box-shadow: 0 0 0 3px rgba(84, 107, 65, 0.15); /* Input focus glow color */
+  background: #e4d0ad;
 }
 
 .input-row {
@@ -593,16 +589,16 @@ body {
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.875rem;
-  color: var(--text-tertiary);
+  color: #6b9354; /* Login footer text color */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   FILTERS BAR
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   FILTERS BAR & CATEGORY PILLS
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .filters-bar {
   display: flex;
@@ -627,29 +623,30 @@ body {
   opacity: 0.5;
 }
 
+/* 🟢 CHANGES SEARCH INPUT BAR */
 .search-box input {
   width: 100%;
   padding: 0.65rem 0.9rem 0.65rem 2.5rem;
-  border: 1.5px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  border: 1.5px solid #43392d; /* Search input border color */
+  border-radius: var(--radius-md);
   font-family: inherit;
   font-size: 0.875rem;
-  color: var(--text-primary);
-  background: var(--bg-secondary);
+  color: #454c2d;             /* Search input text color */
+  background: #e4d0ad;        /* Search input background color */
   transition: all var(--transition-fast);
   outline: none;
 }
 
 .search-box input:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: #5a7147; /* Search input border color on focus */
+  box-shadow: 0 0 0 3px rgba(84, 107, 65, 0.15);
 }
 
 .sort-controls select {
   min-width: 160px;
 }
 
-/* ─── Category Pills ─── */
+/* Category Pills */
 .category-pills {
   display: flex;
   gap: 0.5rem;
@@ -657,12 +654,13 @@ body {
   flex-wrap: wrap;
 }
 
+/* 🟢 CHANGES CATEGORY PILLS (Inactive State) */
 .pill {
   padding: 0.4rem 1rem;
-  border: 1.5px solid var(--border-color);
+  border: 1.5px solid #473e31; /* Pill border color */
   border-radius: var(--radius-full);
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
+  background: #f1dcbb;        /* Pill background color */
+  color: #3b4e2f;             /* Pill text color */
   font-family: inherit;
   font-size: 0.8rem;
   font-weight: 500;
@@ -671,26 +669,27 @@ body {
 }
 
 .pill:hover {
-  border-color: var(--brand-primary);
-  color: var(--brand-primary);
-  background: var(--brand-light);
+  border-color: #2c3a20;
+  color: #f8e8cd;
+  background: #455531;
 }
 
+/* 🟢 CHANGES CATEGORY PILLS (Active State) */
 .pill-active {
-  background: var(--brand-primary);
-  color: white;
-  border-color: var(--brand-primary);
+  background: #455935;        /* Active pill background color */
+  color: #FFFFFF;             /* Active pill text color */
+  border-color: #556c43;      /* Active pill border color */
 }
 
 .pill-active:hover {
-  background: var(--brand-secondary);
-  border-color: var(--brand-secondary);
-  color: white;
+  background: #3E4F30;
+  border-color: #334227;
+  color: #FFFFFF;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   PRODUCT GRID
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   PRODUCT GRID & CARDS
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .product-grid {
   display: grid;
@@ -698,28 +697,45 @@ body {
   gap: 1.25rem;
 }
 
+/* 🟢 CHANGES PRODUCT CARDS BACKGROUND & BORDER */
 .product-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  background: #685841;        /* Product card background color */
+  border: 1px solid #473e31;  /* Product card border color */
+  border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all var(--transition-normal);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(84, 107, 65, 0.04);
 }
 
 .product-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 20px rgba(84, 107, 65, 0.07);
   transform: translateY(-3px);
-  border-color: rgba(79, 70, 229, 0.2);
+  border-color: rgb(72 97 50 / 0.3);
+}
+
+.product-image-container {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  background-color: #ecd9a5; /* Product image box background color */
+  border-bottom: 1px solid #39321e;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .product-image-placeholder {
-  height: 160px;
-  background: var(--bg-tertiary);
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid var(--border-light);
+  background: #ecd9a5;
 }
 
 .product-emoji {
@@ -741,27 +757,30 @@ body {
   gap: 0.5rem;
 }
 
+/* 🟢 CHANGES PRODUCT CATEGORY TAG (e.g. "Fiction", "Sci-Fi") */
 .category-tag {
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--brand-primary);
-  background: var(--brand-light);
+  color: #fff1d6;      /* Category tag text color */
+  background: #9f886a; /* Category tag background color */
   padding: 0.15rem 0.55rem;
   border-radius: var(--radius-full);
 }
 
+/* 🟢 CHANGES PRODUCT NAME TITLE FONT COLOR */
 .product-name {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #f3e7af; /* Product title font color */
   line-height: 1.3;
 }
 
+/* 🟢 CHANGES PRODUCT DESCRIPTION TEXT COLOR */
 .product-desc {
   font-size: 0.8rem;
-  color: var(--text-tertiary);
+  color: #efe5b1; /* Product description text color */
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -775,13 +794,14 @@ body {
   justify-content: space-between;
   margin-top: 0.35rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--border-light);
+  border-top: 1px solid #49380c;
 }
 
+/* 🟢 CHANGES PRODUCT PRICE TEXT COLOR */
 .product-price {
   font-size: 1.2rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: #f1e299; /* Product price font color */
 }
 
 .product-actions {
@@ -789,9 +809,9 @@ body {
   gap: 0.4rem;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   CART VIEW
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   CART VIEW & SUMMARY CARD
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .cart-layout {
   display: grid;
@@ -806,26 +826,27 @@ body {
   gap: 0.75rem;
 }
 
+/* 🟢 CHANGES CART ITEM CARD BACKGROUND & BORDER */
 .cart-item-card {
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  background: #efd9b3;        /* Cart item card background color */
+  border: 1px solid #403626;  /* Cart item card border color */
+  border-radius: var(--radius-lg);
   padding: 1rem 1.25rem;
   transition: all var(--transition-fast);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(84, 107, 65, 0.04);
 }
 
 .cart-item-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 20px rgba(84, 107, 65, 0.07);
 }
 
 .cart-item-image {
   width: 56px;
   height: 56px;
-  background: var(--bg-tertiary);
+  background: #bfb291; /* Cart item image container background color */
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -839,10 +860,11 @@ body {
   min-width: 0;
 }
 
+/* 🟢 CHANGES CART ITEM TITLE */
 .cart-item-info h3 {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #3a431f; /* Cart item title font color */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -850,14 +872,14 @@ body {
 
 .cart-item-price {
   font-size: 0.8rem;
-  color: var(--text-tertiary);
+  color: #1d3a0c; /* Cart item unit price text color */
 }
 
 .cart-item-quantity {
   display: flex;
   align-items: center;
   gap: 0;
-  border: 1.5px solid var(--border-color);
+  border: 1.5px solid #473e31;
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
@@ -866,8 +888,8 @@ body {
   width: 34px;
   height: 34px;
   border: none;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  background: #c6b993; /* Plus/minus quantity button background */
+  color: #3d4924;      /* Plus/minus quantity symbol color */
   font-size: 1rem;
   cursor: pointer;
   display: flex;
@@ -878,8 +900,8 @@ body {
 }
 
 .qty-btn:hover:not(:disabled) {
-  background: var(--brand-light);
-  color: var(--brand-primary);
+  background: #c8ddaf;
+  color: #556c43;
 }
 
 .qty-value {
@@ -889,10 +911,11 @@ body {
   font-weight: 600;
 }
 
+/* 🟢 CHANGES CART ITEM TOTAL PRICE */
 .cart-item-total {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #2d3514; /* Cart item subtotal text color */
   min-width: 70px;
   text-align: right;
 }
@@ -907,13 +930,13 @@ body {
   opacity: 1;
 }
 
-/* ─── Cart Summary ─── */
+/* Cart Summary Card */
 .summary-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  background: #e4d0ad;        /* Checkout summary card background */
+  border: 1px solid #473e31;  /* Checkout summary card border */
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(84, 107, 65, 0.04);
   position: sticky;
   top: 90px;
 }
@@ -921,6 +944,7 @@ body {
 .summary-card h3 {
   font-size: 1.1rem;
   font-weight: 700;
+  color: #203015;
   margin-bottom: 1rem;
 }
 
@@ -930,18 +954,19 @@ body {
   align-items: center;
   padding: 0.5rem 0;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #3b4e2f; /* Summary row text label color */
 }
 
+/* 🟢 CHANGES CART SUMMARY TOTAL PRICE */
 .summary-total {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #324017; /* Summary final total price text color */
 }
 
 .summary-card hr {
   border: none;
-  border-top: 1px solid var(--border-light);
+  border-top: 1px solid #EFE9D9;
   margin: 0.5rem 0;
 }
 
@@ -950,13 +975,13 @@ body {
 }
 
 .text-success {
-  color: var(--accent-success);
+  color: #546B41;
   font-weight: 600;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ORDER HISTORY
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   ORDER HISTORY SECTION
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .orders-list {
   display: flex;
@@ -964,17 +989,18 @@ body {
   gap: 0.75rem;
 }
 
+/* 🟢 CHANGES ORDER HISTORY CARD BACKGROUND & BORDER */
 .order-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  background: #e4d0ad;        /* Order card background color */
+  border: 1px solid #393023;  /* Order card border color */
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(84, 107, 65, 0.04);
   transition: box-shadow var(--transition-fast);
 }
 
 .order-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 20px rgba(84, 107, 65, 0.07);
 }
 
 .order-card-header {
@@ -987,18 +1013,19 @@ body {
 }
 
 .order-card-header:hover {
-  background: var(--bg-tertiary);
+  background: #ecd9a5; /* Order card header background on hover */
 }
 
+/* 🟢 CHANGES ORDER ID & HASH TEXT COLOR */
 .order-id {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #39341a; /* Order ID text color */
   min-width: 70px;
 }
 
 .order-hash {
-  color: var(--brand-primary);
+  color: #556c43; /* Order hash symbol color */
   font-weight: 800;
 }
 
@@ -1009,20 +1036,22 @@ body {
   gap: 0.75rem;
 }
 
+/* 🟢 CHANGES ORDER DATE TEXT COLOR */
 .order-date {
   font-size: 0.825rem;
-  color: var(--text-tertiary);
+  color: #6b9354; /* Order date text color */
 }
 
+/* 🟢 CHANGES ORDER TOTAL AMOUNT TEXT COLOR */
 .order-total {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #423b1d; /* Order total amount text color */
 }
 
 .expand-icon {
   font-size: 0.9rem;
-  color: var(--text-tertiary);
+  color: #6b9354;
   transition: transform var(--transition-fast);
 }
 
@@ -1032,7 +1061,7 @@ body {
 
 .order-details {
   padding: 0 1.25rem 1.25rem;
-  border-top: 1px solid var(--border-light);
+  border-top: 1px solid #EFE9D9;
   animation: fadeUp 0.25s ease;
 }
 
@@ -1048,19 +1077,27 @@ body {
   align-items: center;
 }
 
+/* 🟢 CHANGES TABLE HEADER TEXT COLOR */
 .table-header {
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--text-tertiary);
-  border-bottom: 1px solid var(--border-light);
+  color: #6b9354; /* Table header label text color */
+  border-bottom: 1px solid #EFE9D9;
 }
 
+/* 🟢 CHANGES TABLE ROW TEXT COLOR */
 .table-row {
   font-size: 0.875rem;
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border-light);
+  color: #3b4e2f; /* Table row item text color */
+  border-bottom: 1px solid #EFE9D9;
+}
+
+/* Forces table content inside orders/shipments to stay readable */
+.shipment-card *,
+.table-row * {
+  color: #3b4e2f;
 }
 
 .table-row:last-child {
@@ -1074,13 +1111,13 @@ body {
 .order-payment-info, .order-shipment-link {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--border-light);
+  border-top: 1px solid #EFE9D9;
 }
 
 .order-payment-info h4 {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #3b4e2f; /* Payment section heading color */
   margin-bottom: 0.5rem;
 }
 
@@ -1096,17 +1133,18 @@ body {
   gap: 0.15rem;
 }
 
+/* 🟢 CHANGES INFO LABELS (e.g. "Shipping Address", "Payment Method") */
 .info-label {
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--text-tertiary);
+  color: #6b9354; /* Info label text color */
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SHIPMENT TRACKING
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   SHIPMENT TRACKING SECTION
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .shipments-list {
   display: flex;
@@ -1114,17 +1152,18 @@ body {
   gap: 1rem;
 }
 
+/* 🟢 CHANGES SHIPMENT CARD BACKGROUND & BORDER */
 .shipment-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  background: #e4d0ad;        /* Shipment card background color */
+  border: 1px solid #473e31;  /* Shipment card border color */
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(84, 107, 65, 0.04);
   transition: box-shadow var(--transition-fast);
 }
 
 .shipment-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 20px rgba(84, 107, 65, 0.07);
 }
 
 .shipment-header {
@@ -1141,12 +1180,12 @@ body {
 
 .shipment-order {
   font-size: 0.825rem;
-  color: var(--text-tertiary);
+  color: #6b9354; /* Shipment order label text color */
   margin-top: 0.15rem;
 }
 
 .shipment-total {
-  color: var(--text-secondary);
+  color: #3b4e2f; /* Shipment total price text color */
   font-weight: 500;
 }
 
@@ -1156,7 +1195,7 @@ body {
   gap: 1rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background: var(--bg-tertiary);
+  background: #ecd9a5; /* Shipment inner info box background color */
   border-radius: var(--radius-sm);
 }
 
@@ -1170,14 +1209,15 @@ body {
   font-size: 0.65rem;
 }
 
+/* 🟢 CHANGES TRACKING NUMBER TEXT COLOR */
 .tracking-number {
   font-family: 'Courier New', monospace;
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--brand-primary);
+  color: #556c43; /* Tracking number font color */
 }
 
-/* ─── Timeline ─── */
+/* Timeline */
 .shipment-timeline {
   display: flex;
   align-items: flex-start;
@@ -1194,40 +1234,43 @@ body {
   position: relative;
 }
 
+/* 🟢 CHANGES TIMELINE STEP DOT (Inactive) */
 .step-dot {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--bg-tertiary);
-  border: 2px solid var(--border-color);
+  background: #ecd9a5;        /* Timeline step dot background */
+  border: 2px solid #473e31;  /* Timeline step dot border */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--text-tertiary);
+  color: #6b9354;             /* Timeline step dot number text color */
   position: relative;
   z-index: 2;
   transition: all var(--transition-normal);
 }
 
+/* 🟢 CHANGES TIMELINE STEP DOT (Completed/Active) */
 .step-active .step-dot {
-  background: var(--accent-success-bg);
-  border-color: var(--accent-success);
-  color: var(--accent-success);
+  background: #EBF0E5;       /* Completed step dot background */
+  border-color: #546B41;     /* Completed step dot border */
+  color: #546B41;            /* Completed checkmark/number color */
 }
 
+/* 🟢 CHANGES TIMELINE STEP DOT (Current Stage) */
 .step-current .step-dot {
-  background: var(--brand-primary);
-  border-color: var(--brand-primary);
-  color: white;
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+  background: #556c43;       /* Current active step dot background */
+  border-color: #556c43;     /* Current active step dot border */
+  color: #FFFFFF;            /* Current active step text color */
+  box-shadow: 0 0 0 4px rgba(84, 107, 65, 0.15);
   animation: pulse 2s ease infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); }
-  50% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0.08); }
+  0%, 100% { box-shadow: 0 0 0 4px rgba(84, 107, 65, 0.15); }
+  50% { box-shadow: 0 0 0 8px rgba(84, 107, 65, 0.08); }
 }
 
 .step-line {
@@ -1236,36 +1279,37 @@ body {
   left: calc(50% + 18px);
   right: calc(-50% + 18px);
   height: 2px;
-  background: var(--border-color);
+  background: #473e31; /* Timeline connecting line color */
   z-index: 1;
 }
 
 .line-active {
-  background: var(--accent-success);
+  background: #546B41; /* Completed timeline connecting line color */
 }
 
+/* 🟢 CHANGES TIMELINE STEP LABELS */
 .step-label {
   margin-top: 0.5rem;
   font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: var(--text-tertiary);
+  color: #6b9354; /* Inactive timeline step label color */
   text-align: center;
 }
 
 .step-active .step-label {
-  color: var(--accent-success);
+  color: #546B41;
 }
 
 .step-current .step-label {
-  color: var(--brand-primary);
+  color: #556c43; /* Current timeline step label color */
   font-weight: 700;
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════════════════════════
    REVIEW MODAL
-   ═══════════════════════════════════════════════════════════ */
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .modal-overlay {
   position: fixed;
@@ -1285,16 +1329,17 @@ body {
   to { opacity: 1; }
 }
 
+/* 🟢 CHANGES REVIEW MODAL BOX BACKGROUND & BORDER */
 .modal-content {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background: #e4d0ad;        /* Modal background color */
+  border: 1px solid #473e31;  /* Modal border color */
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 520px;
   max-height: 80vh;
   overflow-y: auto;
   padding: 1.75rem;
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 24px 64px rgba(84, 107, 65, 0.12);
   animation: modalIn 0.3s ease;
 }
 
@@ -1317,17 +1362,17 @@ body {
 
 .modal-subtitle {
   font-size: 0.85rem;
-  color: var(--text-tertiary);
+  color: #6b9354;
   margin-top: 0.15rem;
 }
 
 .modal-close {
   width: 32px;
   height: 32px;
-  border: 1px solid var(--border-color);
+  border: 1px solid #473e31;
   border-radius: var(--radius-sm);
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
+  background: #ecd9a5;
+  color: #3b4e2f;
   cursor: pointer;
   font-size: 0.9rem;
   display: flex;
@@ -1337,16 +1382,15 @@ body {
 }
 
 .modal-close:hover {
-  background: var(--accent-danger-bg);
-  color: var(--accent-danger);
-  border-color: var(--accent-danger);
+  background: #FDF2F0;
+  color: #73773c;
+  border-color: #73773c;
 }
 
-/* ─── Review Summary ─── */
 .review-summary {
   text-align: center;
   padding: 1rem;
-  background: var(--bg-tertiary);
+  background: #ecd9a5;
   border-radius: var(--radius-sm);
   margin-bottom: 1.25rem;
 }
@@ -1361,7 +1405,7 @@ body {
 .avg-number {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: #f4e187;
 }
 
 .avg-stars {
@@ -1371,12 +1415,12 @@ body {
 
 .review-count {
   font-size: 0.8rem;
-  color: var(--text-tertiary);
+  color: #6b9354;
 }
 
-/* ─── Stars ─── */
+/* Star rating colors */
 .star, .star-sm {
-  color: var(--border-color);
+  color: #473e31;
   transition: color var(--transition-fast);
 }
 
@@ -1384,13 +1428,13 @@ body {
 .star-sm { font-size: 0.9rem; }
 
 .star-filled {
-  color: #f59e0b;
+  color: #f59e0b; /* Star rating active gold color */
 }
 
 .star-btn {
   font-size: 1.6rem;
   cursor: pointer;
-  color: var(--border-color);
+  color: #473e31;
   transition: all var(--transition-fast);
   background: none;
   border: none;
@@ -1412,15 +1456,14 @@ body {
 .rating-label {
   margin-left: 0.75rem;
   font-size: 0.8rem;
-  color: var(--text-tertiary);
+  color: #6b9354;
   font-weight: 500;
 }
 
-/* ─── Review Form ─── */
 .review-form {
   margin-bottom: 1.5rem;
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid #EFE9D9;
 }
 
 .review-form h4 {
@@ -1429,15 +1472,16 @@ body {
   margin-bottom: 0.75rem;
 }
 
+/* 🟢 CHANGES REVIEW TEXTAREA FIELD */
 .review-form textarea {
   width: 100%;
   padding: 0.7rem 0.9rem;
-  border: 1.5px solid var(--border-color);
+  border: 1.5px solid #473e31; /* Review textarea border */
   border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.875rem;
-  color: var(--text-primary);
-  background: var(--bg-primary);
+  color: #f4e187;             /* Review textarea text color */
+  background: #6a7a53;        /* Review textarea background color */
   resize: vertical;
   outline: none;
   margin-bottom: 0.75rem;
@@ -1445,11 +1489,10 @@ body {
 }
 
 .review-form textarea:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: #556c43;
+  box-shadow: 0 0 0 3px rgba(84, 107, 65, 0.15);
 }
 
-/* ─── Reviews List ─── */
 .reviews-list {
   display: flex;
   flex-direction: column;
@@ -1458,16 +1501,17 @@ body {
 
 .no-reviews {
   text-align: center;
-  color: var(--text-tertiary);
+  color: #6b9354;
   font-size: 0.9rem;
   padding: 1rem;
 }
 
+/* 🟢 CHANGES INDIVIDUAL REVIEW ITEM BOX */
 .review-item {
   padding: 0.85rem;
-  background: var(--bg-tertiary);
+  background: #ecd9a5;        /* Review item box background */
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-light);
+  border: 1px solid #EFE9D9;  /* Review item box border */
 }
 
 .review-item-header {
@@ -1484,12 +1528,12 @@ body {
 
 .review-date {
   font-size: 0.7rem;
-  color: var(--text-tertiary);
+  color: #6b9354;
 }
 
 .review-comment {
   font-size: 0.85rem;
-  color: var(--text-primary);
+  color: #f4e187; /* Review comment text font color */
   line-height: 1.5;
   margin-bottom: 0.35rem;
 }
@@ -1497,12 +1541,12 @@ body {
 .review-author {
   font-size: 0.7rem;
   font-weight: 500;
-  color: var(--text-tertiary);
+  color: #6b9354;
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════════════════════════
    TOAST NOTIFICATIONS
-   ═══════════════════════════════════════════════════════════ */
+   ═════════════════════════════════════════════════════════════════════════ */
 
 .toast-container {
   position: fixed;
@@ -1515,15 +1559,16 @@ body {
   pointer-events: none;
 }
 
+/* 🟢 CHANGES TOAST POPUP NOTIFICATION CARD */
 .toast {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background: #ffedd1;        /* Toast popup background color */
+  border: 1px solid #473e31;  /* Toast popup border color */
   border-radius: var(--radius-sm);
   padding: 0.8rem 1rem;
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 16px 48px rgba(84, 107, 65, 0.1);
   animation: toastIn 0.35s ease;
   pointer-events: auto;
   cursor: pointer;
@@ -1550,14 +1595,14 @@ body {
   flex-shrink: 0;
 }
 
-.toast-success .toast-icon { background: var(--accent-success-bg); color: var(--accent-success); }
-.toast-error .toast-icon { background: var(--accent-danger-bg); color: var(--accent-danger); }
-.toast-info .toast-icon { background: var(--accent-info-bg); color: var(--accent-info); }
+.toast-success .toast-icon { background: #EBF0E5; color: #546B41; }
+.toast-error .toast-icon { background: #FDF2F0; color: #73773c; }
+.toast-info .toast-icon { background: #F1F5EC; color: #99AD7A; }
 
 .toast-message {
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: #3b4e2f; /* Toast notification message text color */
 }
 
 .toast-progress {
@@ -1569,18 +1614,18 @@ body {
   animation: progress 4s linear;
 }
 
-.toast-success .toast-progress { background: var(--accent-success); }
-.toast-error .toast-progress { background: var(--accent-danger); }
-.toast-info .toast-progress { background: var(--accent-info); }
+.toast-success .toast-progress { background: #546B41; }
+.toast-error .toast-progress { background: #73773c; }
+.toast-info .toast-progress { background: #99AD7A; }
 
 @keyframes progress {
   from { width: 100%; }
   to { width: 0%; }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════════════
+   RESPONSIVE MEDIA QUERIES
+   ═════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 1024px) {
   .cart-layout {
@@ -1620,55 +1665,568 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 1rem;
   }
-
-  .shipment-info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .table-header, .table-row {
-    grid-template-columns: 1.5fr 0.5fr 0.75fr 0.75fr;
-    font-size: 0.8rem;
-  }
-
-  .login-card {
-    margin: 1rem;
-    padding: 1.75rem;
-  }
-
-  .cart-item-card {
-    flex-wrap: wrap;
-  }
-
-  .filters-bar {
-    flex-direction: column;
-  }
-
-  .search-box {
-    min-width: 100%;
-  }
 }
 
-@media (max-width: 480px) {
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
+/* Force HTML tables text color */
+.main-content table th,
+.main-content table td,
+.main-content tr {
+  color: #3b4e2f !important;
+}
 
-  .shipment-timeline {
-    flex-direction: column;
-    gap: 0;
-  }
+/* ═════════════════════════════════════════════════════════════════════════
+   SIDEBAR DRAWER & MENU TOGGLE BUTTON
+   ═════════════════════════════════════════════════════════════════════════ */
 
-  .step-line {
-    display: none;
-  }
+/* 🟢 CHANGES MENU TOGGLE BUTTON (Hamburger button) */
+.menu-toggle-btn {
+  background: #403524;        /* Menu button background color */
+  border: 1px solid #372f22;  /* Menu button border color */
+  padding: 0.5rem 1rem;
+  border-radius: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #f1e0c5;             /* Menu button text color */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
 
-  .timeline-step {
-    flex-direction: row;
-    gap: 0.75rem;
-    padding: 0.5rem 0;
-  }
+.menu-toggle-btn:hover {
+  background: #786a51;
+  color: #fff7e7;
+  border-color: #556c43;
+}
 
-  .step-label {
-    margin-top: 0;
-  }
+.hamburger-icon {
+  font-size: 1.1rem;
+}
+
+/* 🟢 CHANGES SIDEBAR SLIDE-OUT BACKDROP DIMMER */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45); /* Backdrop darkness level */
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sidebar-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 🟢 CHANGES SIDEBAR SLIDE-OUT DRAWER PANEL BACKGROUND */
+.sidebar-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  max-width: 80vw;
+  height: 100%;
+  background: #e4d0ad;        /* Sidebar drawer background color */
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-backdrop.open .sidebar-drawer {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #473e31; /* Sidebar header divider line color */
+  padding-bottom: 1rem;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #3d552c; /* Sidebar header title color */
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #3b4e2f;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.close-btn:hover {
+  background: #cab797;
+  color: #fff3dc;
+}
+
+.sidebar-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* 🟢 CHANGES SIDEBAR NAVIGATION LINKS */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #3b4e2f; /* Sidebar link text color */
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.sidebar-link:hover {
+  background: #c8b38d; /* Sidebar link hover background color */
+  color: #faf3c4;      /* Sidebar link hover text color */
+}
+
+.sidebar-link.active {
+  background: #52613f; /* Active sidebar link background color */
+  color: #f1dfb4;      /* Active sidebar link text color */
+  font-weight: 600;
+}
+
+/* 🟢 CHANGES PAYMENT METHOD DROPDOWN TEXT & BORDER */
+.summary-card select,
+.summary-card .payment-select {
+  border: 1px solid #473e31;  /* Change this hex code for the border */
+  color: #232e1a;             /* Change this hex code for the font color */
+  background: transparent;
+}
+
+/* Sidebar User Section */
+.sidebar-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #675540;
+  margin-bottom: 16px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: #3f4e2f; /* Your brand green */
+  color: #ecdbbe;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optional: Make logout button look "sleek" in the drawer */
+#btn-logout {
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+/* Ensure the banner stretches full width */
+.full-width-banner {
+  width: 100%;
+  line-height: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+
+  /* Add these lines for the thick background/frame effect */
+  background-color: var(--card-bg, #4e3d26); /* Adjust color to match your theme's light parchment tone */
+  border: 4px solid var(--border-color, #4e3d26); /* Adjust thickness (4px) and color */
+  padding: 8px; /* Creates a framed picture effect around the banner */
+}
+
+.full-width-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.profile-card {
+  background-color: #f4ecd8; /* Warm parchment background tone */
+  padding: 2rem;
+  border-radius: var(--radius-lg, 16px); /* Matches your rounded theme */
+  border: 1px solid #3e3020; /* Matches your theme border color */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Style the input fields */
+.profile-card input.form-control,
+.profile-card input[type="text"],
+.profile-card input[type="email"],
+.profile-card input[type="tel"] {
+  background-color: #faf6ed; /* Slightly lighter or matching input background */
+  border: 1px solid #8c6d48; /* Matches your theme border color */
+  color: #3e3020;            /* Text color inside inputs */
+  border-radius: 8px;        /* Soft rounded corners */
+}
+
+/* Style the form labels */
+.profile-card label {
+  color: #5c4033;            /* Darker earthy tone for label text */
+  font-weight: 600;
+}
+
+/* Style the 'Save Changes' button */
+.profile-card button[type="submit"],
+.profile-card .btn-primary {
+  background-color: #556B2F; /* Olive green or matching theme button color */
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+}
+
+/* Style the 'Cancel' button */
+.profile-card button[type="button"],
+.profile-card .btn-secondary {
+  background-color: transparent;
+  border: 1px solid #8c6d48;
+  color: #5c4033;
+  border-radius: 8px;
+}
+
+/* Hover effect for the 'Save Changes' button */
+.profile-card button[type="submit"]:hover,
+.profile-card .btn-primary:hover {
+  background-color: #293511; /* A slightly darker shade of your olive green */
+  cursor: pointer;
+}
+
+/* Hover effect for the 'Cancel' button */
+.profile-card button[type="button"]:hover,
+.profile-card .btn-secondary:hover {
+  background-color: rgba(140, 109, 72, 0.1); /* Adds a subtle warm tint on hover */
+  border-color: #5c4033;                     /* Darkens the border slightly */
+  color: #5c4033;
+  cursor: pointer;
+}
+
+/* Style the Delivery Address section heading/label */
+.profile-card h3,
+.profile-card h4,
+.profile-card .section-title,
+.profile-card div > span:not([class]) {
+  color: #5c4033; /* Change this to your preferred dark earthy theme color */
+}
+
+/* Style the subtitle text under My Profile */
+.profile-header p,
+.profile-subtitle,
+.main-content h3 + p {
+  color: #5c4033; /* Change this to your preferred dark earthy theme color */
+}
+
+/* Style the Edit Profile & Address button globally */
+.btn-secondary {
+  background-color: #556B2F; /* Change to your desired background color */
+  color: #ffffff;            /* Change to your desired text font color */
+  border: 1px solid #3b4e30;
+  border-radius: 8px;
+}
+
+.btn-secondary:hover {
+  background-color: #293511;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* Styling the main dropdown button */
+select, .sort-dropdown {
+  background-color: #ebd7be; /* Beige/cream background */
+  color: #38422d;            /* Dark green text for clear contrast */
+  border: 1px solid #c2b293;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Styling the popup menu items */
+select option, .sort-dropdown option {
+  background-color: #ebd7be; /* Option background */
+  color: #38422d;            /* Option text color */
+  padding: 8px;
+}
+
+/* General Stock Badge Base Styling */
+.stock-badge, .badge-stock {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+/* Base styling for all badges */
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+/* In Stock Button/Badge */
+.badge.badge-success {
+  background-color: #2e5435; /* Dark green background */
+  color: #faead0;            /* High-contrast bright light-green text */
+  border: 1px solid #1f3923;
+}
+
+/* Low Stock Button/Badge */
+.badge.badge-warning {
+  background-color: #7d5218; /* Dark amber background */
+  color: #ffeed3;            /* High-contrast cream text */
+  border: 1px solid #a36d24;
+}
+
+/* Out of Stock Button/Badge */
+.badge.badge-danger {
+  background-color: #6b2828; /* Muted deep red background */
+  color: #ffd6d6;            /* Light pinkish text */
+  border: 1px solid #391717;
+}
+
+/* Hover effect for the clickable Order Card Header */
+.order-card-header:hover {
+  background-color: #cfb187 !important; /* Slightly darker cream on hover */
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Hover effect for the entire Order Card container */
+.order-card:hover {
+  border-color: #38422d !important; /* Accent border on hover */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover effect for the "↻ Refresh" button in the top right */
+.page-header .btn-ghost:hover {
+  background-color: #38422d !important; /* Dark green background */
+  color: #ebd7be !important;            /* Light cream text */
+  border-color: #38422d !important;
+  transition: all 0.2s ease-in-out;
+}
+
+
+/* ==========================================
+   1. "⭐ REVIEWS" BUTTON & HOVER (Product Card)
+   ========================================== */
+.product-actions .btn-ghost {
+  background-color: #ebd7be !important; /* Light beige background */
+  color: #2d3b2a !important;            /* Dark green text */
+  border: 1px solid #c9b499 !important;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 6px 12px;
+  transition: all 0.2s ease-in-out;
+}
+
+.product-actions .btn-ghost:hover {
+  background-color: #2d3b2a !important; /* Dark green on hover */
+  color: #ebd7be !important;            /* Light cream text on hover */
+  border-color: #2d3b2a !important;
+  cursor: pointer;
+}
+
+
+/* ==========================================
+   2. REVIEW MODAL WINDOW & INPUTS
+   ========================================== */
+/* Main Modal Container Card */
+.modal-content,
+.modal-box,
+.review-modal {
+  background-color: #ebd7be !important; /* Light cream background */
+  color: #2d3b2a !important;            /* Dark readable text */
+  border-radius: 16px !important;
+  border: 1px solid #c9b499 !important;
+  padding: 24px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Modal Headers, Subtitles & Labels */
+.modal-content h1,
+.modal-content h2,
+.modal-content h3,
+.modal-content h4 {
+  color: #2d3b2a !important; /* Dark green headings */
+  font-weight: 700 !important;
+}
+
+.modal-content p,
+.modal-content span,
+.modal-content label {
+  color: #3d3127 !important; /* Dark brown/green body text */
+}
+
+/* Close (X) Button */
+.modal-close,
+.close-btn,
+.modal-header button {
+  background-color: #dfcaa8 !important;
+  color: #2d3b2a !important;
+  border: 1px solid #c9b499 !important;
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.modal-close:hover,
+.close-btn:hover {
+  background-color: #2d3b2a !important;
+  color: #ebd7be !important;
+}
+
+/* Review Summary Card (Top Banner inside Modal) */
+.review-summary,
+.rating-summary-box {
+  background-color: #dfcaa8 !important; /* Slightly darker cream highlight box */
+  border-radius: 12px !important;
+  padding: 16px !important;
+  border: 1px solid #c9b499 !important;
+  color: #445a3f !important;
+}
+
+/* Textarea / Input Field Fix */
+.modal-content textarea,
+.modal-content input[type="text"] {
+  background-color: #f7ede1 !important; /* Light readable background */
+  color: #2d3b2a !important;            /* Dark text while typing */
+  border: 1px solid #c9b499 !important;
+  border-radius: 10px !important;
+  padding: 12px !important;
+  font-size: 0.95rem !important;
+  outline: none !important;
+}
+
+.modal-content textarea::placeholder {
+  color: #7a6a5c !important; /* Readable muted brown placeholder */
+}
+
+.modal-content textarea:focus {
+  border-color: #2d3b2a !important;
+  box-shadow: 0 0 0 2px rgba(45, 59, 42, 0.2) !important;
+}
+
+/* Submit Review Button */
+.modal-content .btn-primary,
+.modal-content button[type="submit"] {
+  background-color: #2a3c26 !important; /* Dark green button */
+  color: #ebd7be !important;            /* Cream text */
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 10px 20px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.modal-content .btn-primary:hover,
+.modal-content button[type="submit"]:hover {
+  background-color: #1a231b !important; /* Darker green hover */
+  transform: translateY(-1px);
+}
+
+/* Default unselected star color */
+.star, .star-btn, .star-sm {
+  color: #2d3b2a; /* Dark color for empty stars */
+  cursor: pointer;
+  transition: color 0.15s ease-in-out;
+  user-select: none;
+}
+
+/* Size adjustments */
+.star-btn {
+  font-size: 1.75rem;
+  padding: 0 2px;
+}
+
+.star-sm {
+  font-size: 0.9rem;
+}
+
+/* Yellow color when active, hovered, or part of the average score */
+.star-filled {
+  color: #f59e0b !important; /* Bright yellow */
+}
+
+/* Base unselected star color */
+.modal-content .star,
+.modal-content .star-btn,
+.modal-content .star-sm {
+  color: #2d3b2a;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* High-specificity rule for filled/hovered stars (including the summary .star class) */
+.modal-content .star.star-filled,
+.modal-content .star-btn.star-filled,
+.modal-content .star-sm.star-filled,
+.star.star-filled,
+.star-btn.star-filled,
+.star-sm.star-filled,
+.star-filled {
+  color: #f59e0b !important;
+}
+
+/* Align the navigation/sidebar header items perfectly in the center */
+.nav-header,
+.sidebar-header,
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Ensure the close button perfectly centers the ✕ symbol */
+.nav-close,
+.sidebar-close,
+.menu-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }

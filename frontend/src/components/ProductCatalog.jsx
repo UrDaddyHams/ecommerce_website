@@ -6,7 +6,7 @@ import ReviewModal from './ReviewModal';
 export default function ProductCatalog({ cartId, onCartUpdate }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [productReviews, setProductReviews] = useState({}); // Stores ratings/counts by product ID
+  const [productReviews, setProductReviews] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('productName');
@@ -15,6 +15,9 @@ export default function ProductCatalog({ cartId, onCartUpdate }) {
   const [reviewProduct, setReviewProduct] = useState(null);
   const [addingToCart, setAddingToCart] = useState({});
   const { showToast } = useToast();
+
+  const getProductId = (p) => p?.idProduct || p?.id;
+  const getImageUrl = (p) => p?.imageUrl || p?.image_url || p?.image || p?.imageLink;
 
   useEffect(() => {
     fetchData();
@@ -35,17 +38,19 @@ export default function ProductCatalog({ cartId, onCartUpdate }) {
       const reviewsMap = {};
       await Promise.all(
           loadedProducts.map(async (prod) => {
+            const pId = getProductId(prod);
+            if (!pId) return;
             try {
-              const revRes = await getReviewsByProduct(prod.idProduct);
+              const revRes = await getReviewsByProduct(pId);
               const revs = revRes.data || [];
               if (revs.length > 0) {
                 const avg = (revs.reduce((sum, r) => sum + (r.rating || 0), 0) / revs.length).toFixed(1);
-                reviewsMap[prod.idProduct] = { avg: Number(avg), count: revs.length };
+                reviewsMap[pId] = { avg: Number(avg), count: revs.length };
               } else {
-                reviewsMap[prod.idProduct] = { avg: 0, count: 0 };
+                reviewsMap[pId] = { avg: 0, count: 0 };
               }
             } catch {
-              reviewsMap[prod.idProduct] = { avg: 0, count: 0 };
+              reviewsMap[pId] = { avg: 0, count: 0 };
             }
           })
       );
@@ -58,41 +63,53 @@ export default function ProductCatalog({ cartId, onCartUpdate }) {
   };
 
   const handleAddToCart = async (product) => {
+    const pId = getProductId(product);
     if (!cartId) {
       showToast('Cart not found. Please try again.', 'error');
       return;
     }
-    setAddingToCart((prev) => ({ ...prev, [product.idProduct]: true }));
+    setAddingToCart((prev) => ({ ...prev, [pId]: true }));
     try {
-      await addCartItem(cartId, product.idProduct, 1);
-      showToast(`${product.productName} added to cart!`, 'success');
+      await addCartItem(cartId, pId, 1);
+      const name = product.productName || product.nameProduct || product.title || 'Item';
+      showToast(`${name} added to cart!`, 'success');
       onCartUpdate?.();
     } catch (err) {
       const msg = err.response?.data?.message || err.response?.data || 'Failed to add item';
       showToast(typeof msg === 'string' ? msg : 'Failed to add item', 'error');
     } finally {
-      setAddingToCart((prev) => ({ ...prev, [product.idProduct]: false }));
+      setAddingToCart((prev) => ({ ...prev, [pId]: false }));
     }
   };
 
   const getCategoryName = (idCategory) => {
-    const cat = categories.find((c) => c.idCategory === idCategory);
-    return cat?.categoryName || 'Uncategorized';
+    const cat = categories.find((c) => c.idCategory === idCategory || c.id === idCategory);
+    return cat?.categoryName || cat?.name || 'Uncategorized';
   };
 
   const filtered = products.filter((p) => {
+    const productName = p.productName || p.nameProduct || p.title || '';
     const matchCategory = !selectedCategory || p.idCategory === selectedCategory;
     const matchSearch =
         !searchTerm ||
-        p.productName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.description?.toLowerCase().includes(searchTerm.toLowerCase());
     return matchCategory && matchSearch;
   });
 
   const getStockBadge = (stock) => {
-    if (!stock || stock <= 0) return { cls: 'badge-danger', text: 'Out of Stock' };
+    if (stock == null || stock <= 0) return { cls: 'badge-danger', text: 'Out of Stock' };
     if (stock <= 5) return { cls: 'badge-warning', text: `Low Stock (${stock})` };
     return { cls: 'badge-success', text: 'In Stock' };
+  };
+
+  // Safe Image URL helper using wsrv.nl CORS proxy for external domains
+  const getSafeImageUrl = (url) => {
+    if (!url) return '';
+    if (url.includes('pinimg.com') || url.includes('unsplash.com')) {
+      return `https://images.weserv.nl/?url=${encodeURIComponent(url)}`;
+    }
+    return url;
   };
 
   return (
@@ -143,15 +160,18 @@ export default function ProductCatalog({ cartId, onCartUpdate }) {
           >
             All
           </button>
-          {categories.map((cat) => (
-              <button
-                  key={cat.idCategory}
-                  className={`pill ${selectedCategory === cat.idCategory ? 'pill-active' : ''}`}
-                  onClick={() => setSelectedCategory(cat.idCategory)}
-              >
-                {cat.categoryName}
-              </button>
-          ))}
+          {categories.map((cat) => {
+            const catId = cat.idCategory || cat.id;
+            return (
+                <button
+                    key={catId}
+                    className={`pill ${selectedCategory === catId ? 'pill-active' : ''}`}
+                    onClick={() => setSelectedCategory(catId)}
+                >
+                  {cat.categoryName || cat.name}
+                </button>
+            );
+          })}
         </div>
 
         {/* Product Grid */}
@@ -169,21 +189,48 @@ export default function ProductCatalog({ cartId, onCartUpdate }) {
         ) : (
             <div className="product-grid">
               {filtered.map((product) => {
-                const stock = getStockBadge(product.stock);
-                const revData = productReviews[product.idProduct] || { avg: 0, count: 0 };
+                const pId = getProductId(product);
+                const stockVal = product.stock ?? product.stockQuantity ?? 0;
+                const stock = getStockBadge(stockVal);
+                const revData = productReviews[pId] || { avg: 0, count: 0 };
+                const productName = product.productName || product.nameProduct || product.title || 'Product';
+                const imgUrl = getImageUrl(product);
+
                 return (
-                    <div key={product.idProduct} className="product-card">
-                      <div className="product-image-placeholder">
-                        <span className="product-emoji">📦</span>
+                    <div key={pId} className="product-card">
+                      {/* Image Rendering with Proxy and Fallback */}
+                      <div className="product-image-container">
+                        {imgUrl ? (
+                            <img
+                                src={getSafeImageUrl(imgUrl)}
+                                alt={productName}
+                                className="product-image"
+                                referrerPolicy="no-referrer"
+                                onError={(e) => {
+                                  // Hide only the broken image, keeping the container intact
+                                  e.target.style.display = 'none';
+                                  const placeholder = e.target.parentElement.querySelector('.product-image-placeholder');
+                                  if (placeholder) {
+                                    placeholder.style.display = 'flex';
+                                  }
+                                }}
+                            />
+                        ) : null}
+                        <div
+                            className="product-image-placeholder"
+                            style={{ display: imgUrl ? 'none' : 'flex' }}
+                        >
+                          <span className="product-emoji">📦</span>
+                        </div>
                       </div>
+
                       <div className="product-info">
                         <div className="product-top-row">
                           <span className="category-tag">{getCategoryName(product.idCategory)}</span>
                           <span className={`badge ${stock.cls}`}>{stock.text}</span>
                         </div>
-                        <h3 className="product-name">{product.productName}</h3>
+                        <h3 className="product-name">{productName}</h3>
 
-                        {/* Average Rating Display on Product Card */}
                         <div
                             className="product-rating-summary"
                             onClick={() => setReviewProduct(product)}
@@ -202,7 +249,7 @@ export default function ProductCatalog({ cartId, onCartUpdate }) {
                         <p className="product-desc">{product.description || 'No description available.'}</p>
 
                         <div className="product-bottom">
-                          <span className="product-price">${product.price?.toFixed(2)}</span>
+                          <span className="product-price">${(product.price ?? 0).toFixed(2)}</span>
                           <div className="product-actions">
                             <button
                                 className="btn btn-sm btn-ghost"
@@ -212,12 +259,12 @@ export default function ProductCatalog({ cartId, onCartUpdate }) {
                               ⭐ Reviews
                             </button>
                             <button
-                                id={`add-to-cart-${product.idProduct}`}
+                                id={`add-to-cart-${pId}`}
                                 className="btn btn-sm btn-primary"
                                 onClick={() => handleAddToCart(product)}
-                                disabled={!product.stock || product.stock <= 0 || addingToCart[product.idProduct]}
+                                disabled={stockVal <= 0 || addingToCart[pId]}
                             >
-                              {addingToCart[product.idProduct] ? (
+                              {addingToCart[pId] ? (
                                   <span className="spinner" />
                               ) : (
                                   '+ Cart'
@@ -238,7 +285,7 @@ export default function ProductCatalog({ cartId, onCartUpdate }) {
                 product={reviewProduct}
                 onClose={() => {
                   setReviewProduct(null);
-                  fetchData(); // Refresh reviews summary when modal closes
+                  fetchData();
                 }}
             />
         )}

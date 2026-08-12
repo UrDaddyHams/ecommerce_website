@@ -18,13 +18,16 @@ public class Product {
     private String productName;
 
     @Column(name = "price")
-    private Double price;
+    Double price;
 
     @Column(name = "stock")
     private Integer stock;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
 
     @Column(name = "id_category", insertable = false, updatable = false)
     private Long idCategory;
@@ -48,11 +51,12 @@ public class Product {
 
     public Product() {}
 
-    public Product(String productName, Double price, Integer stock, String description, Long idCategory, Long idSupplier) {
+    public Product(String productName, Double price, Integer stock, String description, String imageUrl, Long idCategory, Long idSupplier) {
         this.productName = productName;
         this.price = price;
         this.stock = stock;
         this.description = description;
+        this.imageUrl = imageUrl;
         this.idCategory = idCategory;
         this.idSupplier = idSupplier;
     }
@@ -71,6 +75,9 @@ public class Product {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public Long getIdCategory() { return idCategory; }
     public void setIdCategory(Long idCategory) { this.idCategory = idCategory; }

@@ -19,6 +19,10 @@ public class ReviewService {
         this.reviewRepository = reviewRepository;
     }
 
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
     public List<Review> getReviewsByProductId(Long idProduct) {
         return reviewRepository.findByProduct_IdProduct(idProduct);
     }

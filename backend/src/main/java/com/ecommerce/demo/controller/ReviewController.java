@@ -19,6 +19,13 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
+    // NEW: Get all reviews for Admin Dashboard
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Review> getAllReviews() {
+        return reviewService.getAllReviews();
+    }
+
     @GetMapping("/product/{idProduct}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Review> getReviewsByProduct(@PathVariable Long idProduct) {

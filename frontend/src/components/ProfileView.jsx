@@ -130,7 +130,7 @@ export default function ProfileView() {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            showToast('Profile updated successfully! ✨', 'success');
+            showToast('Profile updated successfully!', 'success');
             setIsEditing(false);
             fetchProfile();
         } catch (err) {
@@ -157,18 +157,18 @@ export default function ProfileView() {
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                 <div>
                     <h1>My Profile</h1>
-                    <p className="subtitle" style={{ color: '#666' }}>
+                    <p className="subtitle">
                         Account: <strong>{username}</strong> · Role: <strong>{userRole === 'ROLE_ADMIN' ? 'Administrator' : 'Customer'}</strong>
                     </p>
                 </div>
                 {!isEditing && (
                     <button className="btn btn-secondary" onClick={() => setIsEditing(true)} style={{ padding: '8px 16px', cursor: 'pointer' }}>
-                        ✏️ Edit Profile & Address
+                        Edit Profile & Address
                     </button>
                 )}
             </div>
 
-            <div className="profile-card" style={{ background: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', border: '1px solid #e1e4e8' }}>
+            <div className="profile-card">
                 {!isEditing ? (
                     <div className="profile-view-details">
                         <div style={{ marginBottom: '1.2rem' }}>
@@ -234,7 +234,7 @@ export default function ProfileView() {
                         </div>
 
                         <div style={{ display: 'flex', gap: '10px' }}>
-                            <button type="submit" className="btn btn-primary" disabled={saving} style={{ padding: '10px 20px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                            <button type="submit" className="btn btn-primary" disabled={saving} style={{ padding: '10px 20px', background: '#556B2F', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                                 {saving ? 'Saving...' : 'Save Changes'}
                             </button>
                             <button type="button" className="btn btn-ghost" onClick={() => setIsEditing(false)} disabled={saving} style={{ padding: '10px 20px', background: '#e2e8f0', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>

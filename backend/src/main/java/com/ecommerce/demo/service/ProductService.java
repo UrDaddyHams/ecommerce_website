@@ -66,6 +66,12 @@ public class ProductService {
                     if (productDetails.getIdSupplier() != null) {
                         existingProduct.setIdSupplier(productDetails.getIdSupplier());
                     }
+
+                    // Update image URL if provided
+                    if (productDetails.getImageUrl() != null) {
+                        existingProduct.setImageUrl(productDetails.getImageUrl());
+                    }
+
                     return productRepository.save(existingProduct);
                 });
     }

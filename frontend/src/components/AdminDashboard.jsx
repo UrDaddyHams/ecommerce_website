@@ -12,18 +12,38 @@ export default function AdminDashboard() {
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [payments, setPayments] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const { showToast } = useToast();
 
     // Form states
-    const [newProduct, setNewProduct] = useState({ nameProduct: '', price: '', stockQuantity: '', description: '', idCategory: '', idSupplier: '' });
+    const [newProduct, setNewProduct] = useState({
+        nameProduct: '',
+        price: '',
+        stockQuantity: '',
+        description: '',
+        imageUrl: '',
+        idCategory: '',
+        idSupplier: ''
+    });
     const [newCategory, setNewCategory] = useState({ categoryName: '', description: '' });
     const [newSupplier, setNewSupplier] = useState({ supplierName: '', phone: '', email: '' });
 
-    // Edit state for Supplier
+    // Edit states for Supplier and Product
     const [editingSupplierId, setEditingSupplierId] = useState(null);
     const [editSupplierData, setEditSupplierData] = useState({ supplierName: '', phone: '', email: '' });
+
+    const [editingProductId, setEditingProductId] = useState(null);
+    const [editProductData, setEditProductData] = useState({
+        nameProduct: '',
+        price: '',
+        stockQuantity: '',
+        description: '',
+        imageUrl: '',
+        idCategory: '',
+        idSupplier: ''
+    });
 
     useEffect(() => {
         fetchAllData();
@@ -32,16 +52,17 @@ export default function AdminDashboard() {
     const fetchAllData = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('jwt_token');
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
 
-            const [shipRes, prodRes, catRes, supRes, payRes, userRes] = await Promise.allSettled([
+            const [shipRes, prodRes, catRes, supRes, payRes, userRes, revRes] = await Promise.allSettled([
                 getAllShipments(),
                 getProducts(0, 100),
                 getCategories(),
                 axios.get('/api/suppliers', { headers }),
                 axios.get('/api/payments', { headers }),
-                axios.get('/api/customers', { headers })
+                axios.get('/api/customers', { headers }),
+                axios.get('/api/reviews', { headers })
             ]);
 
             if (shipRes.status === 'fulfilled') setShipments(shipRes.value.data || []);
@@ -50,6 +71,7 @@ export default function AdminDashboard() {
             if (supRes.status === 'fulfilled') setSuppliers(supRes.value.data || []);
             if (payRes.status === 'fulfilled') setPayments(payRes.value.data || []);
             if (userRes.status === 'fulfilled') setUsers(userRes.value.data || []);
+            if (revRes.status === 'fulfilled') setReviews(revRes.value.data || []);
         } catch (err) {
             showToast('Failed to load full admin data ecosystem', 'error');
         } finally {
@@ -60,20 +82,91 @@ export default function AdminDashboard() {
     const handleAddProduct = async (e) => {
         e.preventDefault();
         try {
-            const token = localStorage.getItem('jwt_token');
-            await axios.post('/api/products', newProduct, { headers: { Authorization: `Bearer ${token}` } });
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
+
+            const payload = {
+                nameProduct: newProduct.nameProduct,
+                productName: newProduct.nameProduct,
+                title: newProduct.nameProduct,
+                price: parseFloat(newProduct.price),
+                stockQuantity: parseInt(newProduct.stockQuantity, 10),
+                stock: parseInt(newProduct.stockQuantity, 10),
+                description: newProduct.description,
+                imageUrl: newProduct.imageUrl,
+                image: newProduct.imageUrl,
+                idCategory: newProduct.idCategory ? parseInt(newProduct.idCategory, 10) : null,
+                idSupplier: newProduct.idSupplier ? parseInt(newProduct.idSupplier, 10) : null,
+                category: newProduct.idCategory ? { idCategory: parseInt(newProduct.idCategory, 10) } : null,
+                supplier: newProduct.idSupplier ? { idSupplier: parseInt(newProduct.idSupplier, 10) } : null
+            };
+
+            await axios.post('/api/products', payload, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
             showToast('Product added successfully!', 'success');
-            setNewProduct({ nameProduct: '', price: '', stockQuantity: '', description: '', idCategory: '', idSupplier: '' });
+            setNewProduct({ nameProduct: '', price: '', stockQuantity: '', description: '', imageUrl: '', idCategory: '', idSupplier: '' });
             fetchAllData();
         } catch (err) {
-            showToast('Failed to create product', 'error');
+            showToast(err.response?.data?.message || 'Failed to create product', 'error');
+        }
+    };
+
+    const handleStartEditProduct = (product) => {
+        const prodId = product.idProduct || product.id;
+        setEditingProductId(prodId);
+
+        // Catch all possible image property variations from backend
+        const imgVal = product.imageUrl || product.image || product.imgUrl || '';
+        const nameVal = product.productName || product.nameProduct || product.title || product.name || '';
+        const stockVal = product.stockQuantity ?? product.stock ?? 0;
+        const catId = product.idCategory || product.category?.idCategory || '';
+        const supId = product.idSupplier || product.supplier?.idSupplier || '';
+
+        setEditProductData({
+            nameProduct: nameVal,
+            price: product.price ?? '',
+            stockQuantity: stockVal,
+            description: product.description || '',
+            imageUrl: imgVal,
+            idCategory: catId,
+            idSupplier: supId
+        });
+    };
+
+    const handleUpdateProduct = async (id) => {
+        try {
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
+            const payload = {
+                nameProduct: editProductData.nameProduct,
+                productName: editProductData.nameProduct,
+                title: editProductData.nameProduct,
+                price: parseFloat(editProductData.price),
+                stockQuantity: parseInt(editProductData.stockQuantity, 10),
+                stock: parseInt(editProductData.stockQuantity, 10),
+                description: editProductData.description,
+                imageUrl: editProductData.imageUrl,
+                image: editProductData.imageUrl, // Send multiple aliases to match backend mapping
+                imgUrl: editProductData.imageUrl,
+                idCategory: editProductData.idCategory ? parseInt(editProductData.idCategory, 10) : null,
+                idSupplier: editProductData.idSupplier ? parseInt(editProductData.idSupplier, 10) : null,
+                category: editProductData.idCategory ? { idCategory: parseInt(editProductData.idCategory, 10) } : null,
+                supplier: editProductData.idSupplier ? { idSupplier: parseInt(editProductData.idSupplier, 10) } : null
+            };
+
+            await axios.put(`/api/products/${id}`, payload, { headers: { Authorization: `Bearer ${token}` } });
+            showToast('Product updated successfully!', 'success');
+            setEditingProductId(null);
+            fetchAllData();
+        } catch (err) {
+            showToast(err.response?.data?.message || 'Failed to update product', 'error');
         }
     };
 
     const handleDeleteProduct = async (id) => {
         if (!window.confirm(`Are you sure you want to delete product ID: ${id}?`)) return;
         try {
-            const token = localStorage.getItem('jwt_token');
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
             await axios.delete(`/api/products/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             showToast('Product deleted successfully', 'success');
             fetchAllData();
@@ -85,7 +178,7 @@ export default function AdminDashboard() {
     const handleAddCategory = async (e) => {
         e.preventDefault();
         try {
-            const token = localStorage.getItem('jwt_token');
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
             await axios.post('/api/categories', newCategory, { headers: { Authorization: `Bearer ${token}` } });
             showToast('Category added!', 'success');
             setNewCategory({ categoryName: '', description: '' });
@@ -98,7 +191,7 @@ export default function AdminDashboard() {
     const handleDeleteCategory = async (id) => {
         if (!window.confirm('Delete category?')) return;
         try {
-            const token = localStorage.getItem('jwt_token');
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
             await axios.delete(`/api/categories/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             showToast('Category deleted', 'success');
             fetchAllData();
@@ -107,10 +200,24 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleDeleteReview = async (id) => {
+        if (!window.confirm(`Are you sure you want to delete review #${id}?`)) return;
+        try {
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
+            await axios.delete(`/api/reviews/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            showToast('Review deleted successfully', 'success');
+            fetchAllData();
+        } catch (err) {
+            showToast('Failed to delete review', 'error');
+        }
+    };
+
     const handleAddSupplier = async (e) => {
         e.preventDefault();
         try {
-            const token = localStorage.getItem('jwt_token');
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
             await axios.post('/api/suppliers', newSupplier, { headers: { Authorization: `Bearer ${token}` } });
             showToast('Supplier added successfully!', 'success');
             setNewSupplier({ supplierName: '', phone: '', email: '' });
@@ -131,7 +238,7 @@ export default function AdminDashboard() {
 
     const handleUpdateSupplier = async (id) => {
         try {
-            const token = localStorage.getItem('jwt_token');
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
             await axios.put(`/api/suppliers/${id}`, editSupplierData, { headers: { Authorization: `Bearer ${token}` } });
             showToast('Supplier updated successfully!', 'success');
             setEditingSupplierId(null);
@@ -144,7 +251,7 @@ export default function AdminDashboard() {
     const handleDeleteSupplier = async (id) => {
         if (!window.confirm(`Are you sure you want to delete supplier ID: ${id}?`)) return;
         try {
-            const token = localStorage.getItem('jwt_token');
+            const token = localStorage.getItem('jwt_token') || localStorage.getItem('token');
             await axios.delete(`/api/suppliers/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             showToast('Supplier deleted successfully', 'success');
             fetchAllData();
@@ -153,7 +260,6 @@ export default function AdminDashboard() {
         }
     };
 
-    // Reusable professional input style configuration
     const inputStyle = {
         width: '100%',
         padding: '10px 14px',
@@ -170,14 +276,13 @@ export default function AdminDashboard() {
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <div>
                     <h1>🛠️ System Admin Control Panel</h1>
-                    <p className="subtitle" style={{ color: '#64748b' }}>Full CRUD & Global Database Management</p>
                 </div>
                 <button className="btn btn-ghost" onClick={fetchAllData} style={{ cursor: 'pointer' }}>↻ Refresh Data</button>
             </div>
 
             {/* Admin Navigation Sub-Tabs */}
             <div className="admin-tabs" style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-                {['shipments', 'products', 'categories', 'suppliers', 'payments', 'users'].map((tab) => (
+                {['shipments', 'products', 'categories', 'suppliers', 'payments', 'users', 'reviews'].map((tab) => (
                     <button
                         key={tab}
                         className={`btn ${activeTab === tab ? 'btn-primary' : 'btn-ghost'}`}
@@ -190,7 +295,10 @@ export default function AdminDashboard() {
             </div>
 
             {loading ? (
-                <div className="loading-state" style={{ textAlign: 'center', padding: '3rem' }}><div className="spinner-lg" /><p>Loading management records...</p></div>
+                <div className="loading-state" style={{ textAlign: 'center', padding: '3rem' }}>
+                    <div className="spinner-lg" />
+                    <p>Loading management records...</p>
+                </div>
             ) : (
                 <div className="admin-tab-content">
 
@@ -210,11 +318,11 @@ export default function AdminDashboard() {
                                 </thead>
                                 <tbody>
                                 {shipments.map((s) => (
-                                    <tr key={s.idShipment} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                        <td style={{ padding: '10px' }}>#{s.idShipment}</td>
-                                        <td style={{ padding: '10px' }}>#{s.idOrder || s.order?.idOrder}</td>
-                                        <td style={{ padding: '10px' }}>{s.trackingNumber}</td>
-                                        <td style={{ padding: '10px' }}><span className="badge status-processing">{s.status}</span></td>
+                                    <tr key={s.idShipment || s.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                        <td style={{ padding: '10px' }}>#{s.idShipment || s.id}</td>
+                                        <td style={{ padding: '10px' }}>#{s.idOrder || s.order?.idOrder || '—'}</td>
+                                        <td style={{ padding: '10px' }}>{s.trackingNumber || '—'}</td>
+                                        <td style={{ padding: '10px' }}><span className="badge status-processing">{s.status || 'Pending'}</span></td>
                                         <td style={{ padding: '10px' }}>{s.shippingDate ? new Date(s.shippingDate).toLocaleDateString() : '—'}</td>
                                     </tr>
                                 ))}
@@ -230,9 +338,10 @@ export default function AdminDashboard() {
                                 <h3 style={{ marginBottom: '1rem' }}>Add New Product</h3>
                                 <form onSubmit={handleAddProduct} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
                                     <input type="text" placeholder="Product Name" style={inputStyle} value={newProduct.nameProduct} onChange={(e)=>setNewProduct({...newProduct, nameProduct: e.target.value})} required />
-                                    <input type="number" placeholder="Price" style={inputStyle} value={newProduct.price} onChange={(e)=>setNewProduct({...newProduct, price: e.target.value})} required />
+                                    <input type="number" step="0.01" placeholder="Price" style={inputStyle} value={newProduct.price} onChange={(e)=>setNewProduct({...newProduct, price: e.target.value})} required />
                                     <input type="number" placeholder="Stock Quantity" style={inputStyle} value={newProduct.stockQuantity} onChange={(e)=>setNewProduct({...newProduct, stockQuantity: e.target.value})} required />
                                     <input type="text" placeholder="Description" style={inputStyle} value={newProduct.description} onChange={(e)=>setNewProduct({...newProduct, description: e.target.value})} />
+                                    <input type="url" placeholder="Image URL (e.g. https://...)" style={inputStyle} value={newProduct.imageUrl} onChange={(e)=>setNewProduct({...newProduct, imageUrl: e.target.value})} />
                                     <input type="number" placeholder="Category ID" style={inputStyle} value={newProduct.idCategory} onChange={(e)=>setNewProduct({...newProduct, idCategory: e.target.value})} />
                                     <input type="number" placeholder="Supplier ID" style={inputStyle} value={newProduct.idSupplier} onChange={(e)=>setNewProduct({...newProduct, idSupplier: e.target.value})} />
                                     <button type="submit" className="btn btn-primary" style={{ gridColumn: 'span 3', padding: '10px', cursor: 'pointer' }}>Add Product</button>
@@ -245,6 +354,7 @@ export default function AdminDashboard() {
                                     <thead>
                                     <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
                                         <th style={{ padding: '10px' }}>ID</th>
+                                        <th style={{ padding: '10px' }}>Image</th>
                                         <th style={{ padding: '10px' }}>Name</th>
                                         <th style={{ padding: '10px' }}>Price</th>
                                         <th style={{ padding: '10px' }}>Stock</th>
@@ -252,17 +362,102 @@ export default function AdminDashboard() {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {products.map((p) => (
-                                        <tr key={p.idProduct || p.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                            <td style={{ padding: '10px' }}>#{p.idProduct || p.id}</td>
-                                            <td style={{ padding: '10px' }}>{p.nameProduct || p.name}</td>
-                                            <td style={{ padding: '10px' }}>${p.price}</td>
-                                            <td style={{ padding: '10px' }}>{p.stockQuantity || p.stock}</td>
-                                            <td style={{ padding: '10px' }}>
-                                                <button className="btn btn-ghost" style={{ color: 'red', cursor: 'pointer' }} onClick={() => handleDeleteProduct(p.idProduct || p.id)}>Delete</button>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {products.map((p) => {
+                                        const prodId = p.idProduct || p.id;
+                                        const isEditing = editingProductId === prodId;
+                                        const displayImg = p.imageUrl || p.image || p.imgUrl;
+
+                                        return (
+                                            <tr key={prodId} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                                {/* 1. ID Column */}
+                                                <td style={{ padding: '10px' }}>#{prodId}</td>
+
+                                                {/* 2. Image Column */}
+                                                <td style={{ padding: '10px' }}>
+                                                    {isEditing ? (
+                                                        <input
+                                                            type="text"
+                                                            style={inputStyle}
+                                                            placeholder="Image URL"
+                                                            value={editProductData.imageUrl}
+                                                            onChange={(e) => setEditProductData({...editProductData, imageUrl: e.target.value})}
+                                                        />
+                                                    ) : displayImg ? (
+                                                        <img
+                                                            src={displayImg}
+                                                            alt="Product"
+                                                            referrerPolicy="no-referrer"
+                                                            style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }}
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.src = 'https://via.placeholder.com/40?text=📦';
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <span style={{ fontSize: '1.2rem' }}>📦</span>
+                                                    )}
+                                                </td>
+
+                                                {/* 3. Name Column */}
+                                                <td style={{ padding: '10px' }}>
+                                                    {isEditing ? (
+                                                        <input
+                                                            type="text"
+                                                            style={inputStyle}
+                                                            value={editProductData.nameProduct}
+                                                            onChange={(e) => setEditProductData({...editProductData, nameProduct: e.target.value})}
+                                                        />
+                                                    ) : (
+                                                        p.productName || p.nameProduct || p.title || p.name || '—'
+                                                    )}
+                                                </td>
+
+                                                {/* 4. Price Column */}
+                                                <td style={{ padding: '10px' }}>
+                                                    {isEditing ? (
+                                                        <input
+                                                            type="number"
+                                                            step="0.01"
+                                                            style={inputStyle}
+                                                            value={editProductData.price}
+                                                            onChange={(e) => setEditProductData({...editProductData, price: e.target.value})}
+                                                        />
+                                                    ) : (
+                                                        `$${(p.price ?? 0).toFixed?.(2) ?? p.price}`
+                                                    )}
+                                                </td>
+
+                                                {/* 5. Stock Column */}
+                                                <td style={{ padding: '10px' }}>
+                                                    {isEditing ? (
+                                                        <input
+                                                            type="number"
+                                                            style={inputStyle}
+                                                            value={editProductData.stockQuantity}
+                                                            onChange={(e) => setEditProductData({...editProductData, stockQuantity: e.target.value})}
+                                                        />
+                                                    ) : (
+                                                        p.stockQuantity ?? p.stock ?? 0
+                                                    )}
+                                                </td>
+
+                                                {/* 6. Actions Column */}
+                                                <td style={{ padding: '10px' }}>
+                                                    {isEditing ? (
+                                                        <div style={{ display: 'flex', gap: '5px' }}>
+                                                            <button className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer' }} onClick={() => handleUpdateProduct(prodId)}>Save</button>
+                                                            <button className="btn btn-ghost" style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer' }} onClick={() => setEditingProductId(null)}>Cancel</button>
+                                                        </div>
+                                                    ) : (
+                                                        <div style={{ display: 'flex', gap: '5px' }}>
+                                                            <button className="btn btn-ghost" style={{ cursor: 'pointer' }} onClick={() => handleStartEditProduct(p)}>Edit</button>
+                                                            <button className="btn btn-ghost" style={{ color: 'red', cursor: 'pointer' }} onClick={() => handleDeleteProduct(prodId)}>Delete</button>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                     </tbody>
                                 </table>
                             </div>
@@ -430,14 +625,10 @@ export default function AdminDashboard() {
                                 {payments.map((pay) => (
                                     <tr key={pay.idPayment || pay.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                                         <td style={{ padding: '10px' }}>#{pay.idPayment || pay.id}</td>
-                                        <td style={{ padding: '10px' }}>#{pay.idOrder || pay.order?.idOrder}</td>
+                                        <td style={{ padding: '10px' }}>#{pay.idOrder || pay.order?.idOrder || '—'}</td>
                                         <td style={{ padding: '10px' }}>${pay.amount}</td>
-                                        <td style={{ padding: '10px' }}>
-                                            <span className="badge" style={{ background: '#e0f2fe', color: '#0369a1' }}>
-                                                {pay.paymentMethod || 'Credit Card'}
-                                            </span>
-                                        </td>
-                                        <td style={{ padding: '10px' }}><span className="badge status-delivered">{pay.status || 'Completed'}</span></td>
+                                        <td style={{ padding: '10px' }}>{pay.paymentMethod || 'Credit Card'}</td>
+                                        <td style={{ padding: '10px' }}><span className="badge status-completed">{pay.status || 'COMPLETED'}</span></td>
                                     </tr>
                                 ))}
                                 </tbody>
@@ -448,23 +639,54 @@ export default function AdminDashboard() {
                     {/* USERS TAB */}
                     {activeTab === 'users' && (
                         <div className="card" style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
-                            <h3>Registered Customers ({users.length})</h3>
+                            <h3>Customer Accounts ({users.length})</h3>
                             <table className="admin-table" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
                                 <thead>
                                 <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
-                                    <th style={{ padding: '10px' }}>Customer ID</th>
-                                    <th style={{ padding: '10px' }}>Username</th>
-                                    <th style={{ padding: '10px' }}>Name</th>
+                                    <th style={{ padding: '10px' }}>User ID</th>
+                                    <th style={{ padding: '10px' }}>Full Name</th>
                                     <th style={{ padding: '10px' }}>Email</th>
+                                    <th style={{ padding: '10px' }}>Phone</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {users.map((u) => (
                                     <tr key={u.idCustomer || u.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                                         <td style={{ padding: '10px' }}>#{u.idCustomer || u.id}</td>
-                                        <td style={{ padding: '10px' }}>{u.username}</td>
-                                        <td style={{ padding: '10px' }}>{u.firstName} {u.lastName}</td>
+                                        <td style={{ padding: '10px' }}>{u.firstName || u.name} {u.lastName || ''}</td>
                                         <td style={{ padding: '10px' }}>{u.email}</td>
+                                        <td style={{ padding: '10px' }}>{u.phone || '—'}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+
+                    {/* REVIEWS TAB */}
+                    {activeTab === 'reviews' && (
+                        <div className="card" style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
+                            <h3>Product Reviews ({reviews.length})</h3>
+                            <table className="admin-table" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
+                                <thead>
+                                <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
+                                    <th style={{ padding: '10px' }}>Review ID</th>
+                                    <th style={{ padding: '10px' }}>Product ID</th>
+                                    <th style={{ padding: '10px' }}>Rating</th>
+                                    <th style={{ padding: '10px' }}>Comment</th>
+                                    <th style={{ padding: '10px' }}>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {reviews.map((r) => (
+                                    <tr key={r.idReview || r.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                        <td style={{ padding: '10px' }}>#{r.idReview || r.id}</td>
+                                        <td style={{ padding: '10px' }}>#{r.idProduct || r.product?.idProduct || '—'}</td>
+                                        <td style={{ padding: '10px' }}>⭐ {r.rating}/5</td>
+                                        <td style={{ padding: '10px' }}>{r.comment || '—'}</td>
+                                        <td style={{ padding: '10px' }}>
+                                            <button className="btn btn-ghost" style={{ color: 'red', cursor: 'pointer' }} onClick={() => handleDeleteReview(r.idReview || r.id)}>Delete</button>
+                                        </td>
                                     </tr>
                                 ))}
                                 </tbody>
