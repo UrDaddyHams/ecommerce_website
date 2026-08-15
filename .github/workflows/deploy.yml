@@ -1,0 +1,32 @@
+name: Deploy to Production EC2
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - host: ${{ secrets.EC2_HOST_1 }}
+            key: ${{ secrets.EC2_SSH_KEY_1 }}
+          - host: ${{ secrets.EC2_HOST_2 }}
+            key: ${{ secrets.EC2_SSH_KEY_2 }}
+
+    steps:
+      - name: Deploy via SSH to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ matrix.host }}
+          username: ubuntu
+          key: ${{ matrix.key }}
+          script: |
+            cd ecommerce_website
+            git pull origin main --rebase
+            cd frontend
+            npm run build
+            sudo cp -r dist/* /var/www/html/
+            sudo systemctl daemon-reload
+            sudo systemctl reload nginx
