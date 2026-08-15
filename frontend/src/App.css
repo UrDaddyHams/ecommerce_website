@@ -1762,14 +1762,18 @@ body {
 }
 
 .close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.25rem;
+  line-height: 1;
   background: transparent;
-  border: none;
-  font-size: 1.2rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  color: #3b4e2f;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  transition: background 0.2s;
 }
 
 .close-btn:hover {
@@ -1877,7 +1881,7 @@ body {
 }
 
 .profile-card {
-  background-color: #f4ecd8; /* Warm parchment background tone */
+  background-color: #d3c1a0; /* Warm parchment background tone */
   padding: 2rem;
   border-radius: var(--radius-lg, 16px); /* Matches your rounded theme */
   border: 1px solid #3e3020; /* Matches your theme border color */
@@ -1889,8 +1893,8 @@ body {
 .profile-card input[type="text"],
 .profile-card input[type="email"],
 .profile-card input[type="tel"] {
-  background-color: #faf6ed; /* Slightly lighter or matching input background */
-  border: 1px solid #8c6d48; /* Matches your theme border color */
+  background-color: #f4ecd6; /* Slightly lighter or matching input background */
+  border: 1px solid #302619; /* Matches your theme border color */
   color: #3e3020;            /* Text color inside inputs */
   border-radius: 8px;        /* Soft rounded corners */
 }
@@ -1931,7 +1935,7 @@ body {
 .profile-card button[type="button"]:hover,
 .profile-card .btn-secondary:hover {
   background-color: rgba(140, 109, 72, 0.1); /* Adds a subtle warm tint on hover */
-  border-color: #5c4033;                     /* Darkens the border slightly */
+  border-color: #3a281f;                     /* Darkens the border slightly */
   color: #5c4033;
   cursor: pointer;
 }
@@ -2230,3 +2234,53 @@ select option, .sort-dropdown option {
   justify-content: center;
   line-height: 1;
 }
+
+.qty-value {
+  width: 36px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3d4924; /* Change this hex code to your preferred dark text color */
+}
+
+.badge.status-processing {
+  color: #fff4e2; /* Sets the font to white */
+}
+
+.shipment-info-grid {
+  background-color: #ccb997; /* Change to a soft neutral/green tint, white, or transparent */
+  padding: 12px;
+  border-radius: 6px;
+}
+
+/* Container cards and tables inside the admin panel */
+.admin-tab-content .card,
+.admin-tab-content .admin-table,
+.admin-dashboard .card {
+  background-color: #efdfc5 !important;
+  color: #3d4924 !important;
+  border: 1px solid #34392f !important;
+}
+
+/* Table rows */
+.admin-table td {
+  border-bottom-color: #2f3529 !important;
+  color: #636c50 !important;
+}
+
+.card .admin-table th,
+.admin-tab-content .admin-table th {
+  background-color: #76815f !important;
+  color: #fdf3e2 !important;
+  border-bottom-color: #2f3529 !important;
+}
+
+/* Form inputs inside admin view */
+.admin-tab-content input,
+.admin-tab-content select,
+.admin-tab-content textarea {
+  background-color: #f6eddf !important;
+  color: #c9df9a !important;
+  border: 1px solid #504638 !important;
+}
+

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getOrdersByCustomer, getShipmentByOrderId, getAllShipments,getShipmentsByUser, getOrdersByUser } from '../api/apiClient';
+import { getOrdersByCustomer, getShipmentByOrderId, getAllShipments, getShipmentsByUser, getOrdersByUser } from '../api/apiClient';
 import { useToast } from '../context/ToastContext';
 
 const STEPS = ['PROCESSING', 'SHIPPED', 'IN_TRANSIT', 'DELIVERED'];
@@ -18,7 +18,6 @@ export default function ShipmentTracking({ userId }) {
     try {
       const userRole = localStorage.getItem('user_role');
 
-      // 1. If Admin, fetch ALL shipments globally
       if (userRole === 'ROLE_ADMIN') {
         const res = await getAllShipments();
         setShipments(res.data || []);
@@ -26,7 +25,6 @@ export default function ShipmentTracking({ userId }) {
         return;
       }
 
-      // 2. If regular user, fetch user shipments (fall back to localStorage if userId prop is missing)
       const effectiveUserId = userId || localStorage.getItem('customerId');
       if (!effectiveUserId) {
         setShipments([]);
@@ -37,8 +35,6 @@ export default function ShipmentTracking({ userId }) {
       const res = await getShipmentsByUser(effectiveUserId);
       let shipmentsData = res.data || [];
 
-
-      // Fallback: If no shipment entries exist yet, map orders to default processing cards
       if (shipmentsData.length === 0) {
         const ordersRes = await getOrdersByUser(effectiveUserId);
         shipmentsData = (ordersRes.data || []).map((order) => ({
@@ -106,24 +102,57 @@ export default function ShipmentTracking({ userId }) {
             </div>
         ) : (
             <div className="shipments-list">
-              {shipments.map((shipment) => {
+              {[...shipments].reverse().map((shipment, index) => {
+                if (!shipment) return null;
+
                 const stepIdx = getStepIndex(shipment.status);
+                const userShipmentNum = shipments.length - index;
+
+                // Safe extraction of all items in the order
+                const items = shipment.order?.orderItems || shipment.order?.items || [];
+
+                // Get all product names for the header summary
+                const itemNames = items.map(item => item.product?.productName || item.productName || 'Book Item');
+                const displayProductNames = itemNames.length > 0 ? itemNames.join(', ') : (shipment.productName || 'Book Item');
+
                 return (
-                    <div key={shipment.idShipment} className="shipment-card">
+                    <div key={shipment.idShipment || index} className="shipment-card">
                       <div className="shipment-header">
                         <div>
-                          <h3>Shipment #{shipment.idShipment}</h3>
+                          <h3>
+                            Shipment #{userShipmentNum} · {displayProductNames}
+                          </h3>
                           <p className="shipment-order">
-                            Order #{shipment.idOrder || shipment.order?.idOrder}
-                            {shipment.order && (
-                                <span className="shipment-total"> · ${shipment.order.totalAmount?.toFixed(2)}</span>
+                            Ordered {formatDate(shipment.order?.orderDate || shipment.shippingDate)}
+                            {shipment.order?.totalAmount != null && (
+                                <span className="shipment-total"> · ${Number(shipment.order.totalAmount).toFixed(2)}</span>
                             )}
                           </p>
                         </div>
+
                         <span className={`badge ${getStatusColor(shipment.status)}`}>
-                    {shipment.status || 'Unknown'}
-                  </span>
+                          {shipment.status || 'Unknown'}
+                        </span>
                       </div>
+
+                      {/* Full Order Items Breakdown Section */}
+                      {items.length > 0 && (
+                          <div className="shipment-items-section" style={{ marginTop: '10px', marginBottom: '14px', padding: '10px 14px', background: 'rgba(0,0,0,0.03)', borderRadius: '6px' }}>
+                            <span className="info-label" style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>Full Order Items ({items.length})</span>
+                            <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              {items.map((item, idx) => {
+                                const pName = item.product?.productName || 'Book Item';
+                                const qty = item.quantity || 1;
+                                const price = item.price != null ? ` — $${(item.price * qty).toFixed(2)}` : '';
+                                return (
+                                    <li key={idx}>
+                                      {pName} {qty > 1 ? `(Qty: ${qty})` : ''} {price}
+                                    </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                      )}
 
                       <div className="shipment-info-grid">
                         <div className="info-item">

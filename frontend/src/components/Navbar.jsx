@@ -19,16 +19,46 @@ export default function Navbar({ activePage, onNavigate, cartCount, username, on
 
   return (
       <>
-        <nav className="navbar">
+        {/* Adjusted top and left padding here so it doesn't touch the edge */}
+        <nav className="navbar" style={{ paddingTop: '125px', paddingLeft: '16px' }}>
           <div className="navbar-inner">
-            {/* Menu Toggle Button */}
+            {/* Menu Toggle Button / Admin Label */}
             {!isAdmin ? (
-                <button className="menu-toggle-btn" onClick={() => setSidebarOpen(true)}>
-                  <span className="hamburger-icon">☰</span>
-                  <span className="menu-text">Menu</span>
-                </button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                  {/* Menu Button */}
+                  <button
+                      className="menu-toggle-btn"
+                      onClick={() => setSidebarOpen(true)}
+                      style={{ padding: '18px 18px', fontSize: '1rem' }}
+                  >
+                    <span className="hamburger-icon">☰</span>
+                    <span className="menu-text">Menu</span>
+                  </button>
+
+                  {/* External Quick Cart Button */}
+                  <button
+                      className="menu-toggle-btn"
+                      onClick={() => onNavigate('cart')}
+                      style={{
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '20px 20px',
+                        fontSize: '1rem'
+                      }}
+                  >
+                    <span></span>
+                    <span className="menu-text">Cart</span>
+                    {cartCount > 0 && (
+                        <span className="cart-badge" style={{ marginLeft: 'auto', background: '#a6957c', color: '#fff', borderRadius: '50%', padding: '2px 6px', fontSize: '0.75rem' }}>
+                        {cartCount}
+                      </span>
+                    )}
+                  </button>
+                </div>
             ) : (
-                <div className="navbar-admin-label">Admin Control Panel</div>
+                <div className="navbar-admin-label"></div>
             )}
           </div>
         </nav>

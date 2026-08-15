@@ -116,7 +116,6 @@ export default function AdminDashboard() {
         const prodId = product.idProduct || product.id;
         setEditingProductId(prodId);
 
-        // Catch all possible image property variations from backend
         const imgVal = product.imageUrl || product.image || product.imgUrl || '';
         const nameVal = product.productName || product.nameProduct || product.title || product.name || '';
         const stockVal = product.stockQuantity ?? product.stock ?? 0;
@@ -146,7 +145,7 @@ export default function AdminDashboard() {
                 stock: parseInt(editProductData.stockQuantity, 10),
                 description: editProductData.description,
                 imageUrl: editProductData.imageUrl,
-                image: editProductData.imageUrl, // Send multiple aliases to match backend mapping
+                image: editProductData.imageUrl,
                 imgUrl: editProductData.imageUrl,
                 idCategory: editProductData.idCategory ? parseInt(editProductData.idCategory, 10) : null,
                 idSupplier: editProductData.idSupplier ? parseInt(editProductData.idSupplier, 10) : null,
@@ -228,7 +227,8 @@ export default function AdminDashboard() {
     };
 
     const handleStartEditSupplier = (supplier) => {
-        setEditingSupplierId(supplier.idSupplier || supplier.id);
+        const supId = supplier.idSupplier || supplier.id;
+        setEditingSupplierId(supId);
         setEditSupplierData({
             supplierName: supplier.supplierName || supplier.nameSupplier || supplier.name || '',
             phone: supplier.phone || '',
@@ -269,15 +269,40 @@ export default function AdminDashboard() {
         outline: 'none',
         backgroundColor: '#ffffff',
         boxSizing: 'border-box',
+        caretColor: '#232c1d',
+        color: '#283321',
     };
 
     return (
         <div className="page-content" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+            <style>{`
+                .page-content input, 
+                .page-content textarea, 
+                .page-content select {
+                    color: #283321 !important;
+                    caret-color: #232c1d !important;
+                }
+            `}</style>
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <div>
-                    <h1>🛠️ System Admin Control Panel</h1>
+                    <h1> System Admin Control Panel</h1>
                 </div>
-                <button className="btn btn-ghost" onClick={fetchAllData} style={{ cursor: 'pointer' }}>↻ Refresh Data</button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <button className="btn btn-ghost" onClick={fetchAllData} style={{ cursor: 'pointer' }}>↻ Refresh Data</button>
+                    <button
+                        className="btn btn-ghost"
+                        onClick={() => {
+                            localStorage.removeItem('jwt_token');
+                            localStorage.removeItem('token');
+                            window.location.href = '/';
+                        }}
+                        style={{ cursor: 'pointer',
+                            color: '#3b4e2f',
+                            borderColor: '#34402b' }}
+                    >
+                         Logout
+                    </button>
+                </div>
             </div>
 
             {/* Admin Navigation Sub-Tabs */}
@@ -369,10 +394,7 @@ export default function AdminDashboard() {
 
                                         return (
                                             <tr key={prodId} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                                {/* 1. ID Column */}
                                                 <td style={{ padding: '10px' }}>#{prodId}</td>
-
-                                                {/* 2. Image Column */}
                                                 <td style={{ padding: '10px' }}>
                                                     {isEditing ? (
                                                         <input
@@ -397,8 +419,6 @@ export default function AdminDashboard() {
                                                         <span style={{ fontSize: '1.2rem' }}>📦</span>
                                                     )}
                                                 </td>
-
-                                                {/* 3. Name Column */}
                                                 <td style={{ padding: '10px' }}>
                                                     {isEditing ? (
                                                         <input
@@ -411,8 +431,6 @@ export default function AdminDashboard() {
                                                         p.productName || p.nameProduct || p.title || p.name || '—'
                                                     )}
                                                 </td>
-
-                                                {/* 4. Price Column */}
                                                 <td style={{ padding: '10px' }}>
                                                     {isEditing ? (
                                                         <input
@@ -426,8 +444,6 @@ export default function AdminDashboard() {
                                                         `$${(p.price ?? 0).toFixed?.(2) ?? p.price}`
                                                     )}
                                                 </td>
-
-                                                {/* 5. Stock Column */}
                                                 <td style={{ padding: '10px' }}>
                                                     {isEditing ? (
                                                         <input
@@ -440,8 +456,6 @@ export default function AdminDashboard() {
                                                         p.stockQuantity ?? p.stock ?? 0
                                                     )}
                                                 </td>
-
-                                                {/* 6. Actions Column */}
                                                 <td style={{ padding: '10px' }}>
                                                     {isEditing ? (
                                                         <div style={{ display: 'flex', gap: '5px' }}>
@@ -528,37 +542,35 @@ export default function AdminDashboard() {
                                     <button type="submit" className="btn btn-primary" style={{ gridColumn: 'span 3', padding: '10px', cursor: 'pointer' }}>Add Supplier</button>
                                 </form>
                             </div>
-
                             <div className="card" style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
-                                <h3>Suppliers Directory ({suppliers.length})</h3>
+                                <h3>Suppliers List ({suppliers.length})</h3>
                                 <table className="admin-table" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
                                     <thead>
                                     <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
                                         <th style={{ padding: '10px' }}>ID</th>
                                         <th style={{ padding: '10px' }}>Supplier Name</th>
                                         <th style={{ padding: '10px' }}>Phone</th>
-                                        <th style={{ padding: '10px' }}>Contact Email</th>
+                                        <th style={{ padding: '10px' }}>Email</th>
                                         <th style={{ padding: '10px' }}>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {suppliers.map((s) => {
-                                        const supplierId = s.idSupplier || s.id;
-                                        const isEditing = editingSupplierId === supplierId;
-
+                                    {suppliers.map((sup) => {
+                                        const supId = sup.idSupplier || sup.id;
+                                        const isEditing = editingSupplierId === supId;
                                         return (
-                                            <tr key={supplierId} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                                <td style={{ padding: '10px' }}>#{supplierId}</td>
+                                            <tr key={supId} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                                <td style={{ padding: '10px' }}>#{supId}</td>
                                                 <td style={{ padding: '10px' }}>
                                                     {isEditing ? (
                                                         <input
                                                             type="text"
                                                             style={inputStyle}
                                                             value={editSupplierData.supplierName}
-                                                            onChange={(e) => setEditSupplierData({...editSupplierData, supplierName: e.target.value})}
+                                                            onChange={(e)=>setEditSupplierData({...editSupplierData, supplierName: e.target.value})}
                                                         />
                                                     ) : (
-                                                        s.supplierName || s.nameSupplier || s.name
+                                                        sup.supplierName || sup.nameSupplier || sup.name || '—'
                                                     )}
                                                 </td>
                                                 <td style={{ padding: '10px' }}>
@@ -567,10 +579,10 @@ export default function AdminDashboard() {
                                                             type="text"
                                                             style={inputStyle}
                                                             value={editSupplierData.phone}
-                                                            onChange={(e) => setEditSupplierData({...editSupplierData, phone: e.target.value})}
+                                                            onChange={(e)=>setEditSupplierData({...editSupplierData, phone: e.target.value})}
                                                         />
                                                     ) : (
-                                                        s.phone || '—'
+                                                        sup.phone || '—'
                                                     )}
                                                 </td>
                                                 <td style={{ padding: '10px' }}>
@@ -579,22 +591,22 @@ export default function AdminDashboard() {
                                                             type="email"
                                                             style={inputStyle}
                                                             value={editSupplierData.email}
-                                                            onChange={(e) => setEditSupplierData({...editSupplierData, email: e.target.value})}
+                                                            onChange={(e)=>setEditSupplierData({...editSupplierData, email: e.target.value})}
                                                         />
                                                     ) : (
-                                                        s.email || '—'
+                                                        sup.email || '—'
                                                     )}
                                                 </td>
                                                 <td style={{ padding: '10px' }}>
                                                     {isEditing ? (
                                                         <div style={{ display: 'flex', gap: '5px' }}>
-                                                            <button className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer' }} onClick={() => handleUpdateSupplier(supplierId)}>Save</button>
+                                                            <button className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer' }} onClick={() => handleUpdateSupplier(supId)}>Save</button>
                                                             <button className="btn btn-ghost" style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer' }} onClick={() => setEditingSupplierId(null)}>Cancel</button>
                                                         </div>
                                                     ) : (
                                                         <div style={{ display: 'flex', gap: '5px' }}>
-                                                            <button className="btn btn-ghost" style={{ cursor: 'pointer' }} onClick={() => handleStartEditSupplier(s)}>Edit</button>
-                                                            <button className="btn btn-ghost" style={{ color: 'red', cursor: 'pointer' }} onClick={() => handleDeleteSupplier(supplierId)}>Delete</button>
+                                                            <button className="btn btn-ghost" style={{ cursor: 'pointer' }} onClick={() => handleStartEditSupplier(sup)} >Edit</button>
+                                                            <button className="btn btn-ghost" style={{ color: 'red', cursor: 'pointer' }} onClick={() => handleDeleteSupplier(supId)}>Delete</button>
                                                         </div>
                                                     )}
                                                 </td>
@@ -610,25 +622,25 @@ export default function AdminDashboard() {
                     {/* PAYMENTS TAB */}
                     {activeTab === 'payments' && (
                         <div className="card" style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
-                            <h3>System Payments Log ({payments.length})</h3>
+                            <h3>All System Payments ({payments.length})</h3>
                             <table className="admin-table" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
                                 <thead>
                                 <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
                                     <th style={{ padding: '10px' }}>Payment ID</th>
                                     <th style={{ padding: '10px' }}>Order ID</th>
                                     <th style={{ padding: '10px' }}>Amount</th>
-                                    <th style={{ padding: '10px' }}>Payment Method</th>
+                                    <th style={{ padding: '10px' }}>Method</th>
                                     <th style={{ padding: '10px' }}>Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {payments.map((pay) => (
-                                    <tr key={pay.idPayment || pay.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                        <td style={{ padding: '10px' }}>#{pay.idPayment || pay.id}</td>
-                                        <td style={{ padding: '10px' }}>#{pay.idOrder || pay.order?.idOrder || '—'}</td>
-                                        <td style={{ padding: '10px' }}>${pay.amount}</td>
-                                        <td style={{ padding: '10px' }}>{pay.paymentMethod || 'Credit Card'}</td>
-                                        <td style={{ padding: '10px' }}><span className="badge status-completed">{pay.status || 'COMPLETED'}</span></td>
+                                {payments.map((p) => (
+                                    <tr key={p.idPayment || p.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                        <td style={{ padding: '10px' }}>#{p.idPayment || p.id}</td>
+                                        <td style={{ padding: '10px' }}>#{p.idOrder || p.order?.idOrder || '—'}</td>
+                                        <td style={{ padding: '10px' }}>${(p.amount ?? 0).toFixed?.(2) ?? p.amount}</td>
+                                        <td style={{ padding: '10px' }}>{p.paymentMethod || p.method || '—'}</td>
+                                        <td style={{ padding: '10px' }}><span className="badge">{p.status || 'Completed'}</span></td>
                                     </tr>
                                 ))}
                                 </tbody>
@@ -639,23 +651,23 @@ export default function AdminDashboard() {
                     {/* USERS TAB */}
                     {activeTab === 'users' && (
                         <div className="card" style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
-                            <h3>Customer Accounts ({users.length})</h3>
+                            <h3>Registered Customers ({users.length})</h3>
                             <table className="admin-table" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
                                 <thead>
                                 <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
                                     <th style={{ padding: '10px' }}>User ID</th>
-                                    <th style={{ padding: '10px' }}>Full Name</th>
+                                    <th style={{ padding: '10px' }}>Name</th>
                                     <th style={{ padding: '10px' }}>Email</th>
-                                    <th style={{ padding: '10px' }}>Phone</th>
+                                    <th style={{ padding: '10px' }}>Role</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {users.map((u) => (
-                                    <tr key={u.idCustomer || u.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                        <td style={{ padding: '10px' }}>#{u.idCustomer || u.id}</td>
-                                        <td style={{ padding: '10px' }}>{u.firstName || u.name} {u.lastName || ''}</td>
-                                        <td style={{ padding: '10px' }}>{u.email}</td>
-                                        <td style={{ padding: '10px' }}>{u.phone || '—'}</td>
+                                    <tr key={u.idCustomer || u.id || u.userId} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                        <td style={{ padding: '10px' }}>#{u.idCustomer || u.id || u.userId}</td>
+                                        <td style={{ padding: '10px' }}>{u.fullName || u.name || u.username || '—'}</td>
+                                        <td style={{ padding: '10px' }}>{u.email || '—'}</td>
+                                        <td style={{ padding: '10px' }}>{u.role || 'Customer'}</td>
                                     </tr>
                                 ))}
                                 </tbody>
@@ -682,8 +694,8 @@ export default function AdminDashboard() {
                                     <tr key={r.idReview || r.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                                         <td style={{ padding: '10px' }}>#{r.idReview || r.id}</td>
                                         <td style={{ padding: '10px' }}>#{r.idProduct || r.product?.idProduct || '—'}</td>
-                                        <td style={{ padding: '10px' }}>⭐ {r.rating}/5</td>
-                                        <td style={{ padding: '10px' }}>{r.comment || '—'}</td>
+                                        <td style={{ padding: '10px' }}>{r.rating} / 5</td>
+                                        <td style={{ padding: '10px' }}>{r.comment || r.reviewText || '—'}</td>
                                         <td style={{ padding: '10px' }}>
                                             <button className="btn btn-ghost" style={{ color: 'red', cursor: 'pointer' }} onClick={() => handleDeleteReview(r.idReview || r.id)}>Delete</button>
                                         </td>
