@@ -25,7 +25,15 @@ jobs:
           script: |
             cd ecommerce_website
             git pull origin main --rebase
-            cd frontend
+            
+            # 1. Build and restart Spring Boot Backend
+            cd backend
+            ./mvnw clean package -DskipTests
+            pkill -f 'java -jar' || true
+            nohup java -jar target/*.jar > app.log 2>&1 &
+            
+            # 2. Build and update React Frontend
+            cd ../frontend
             npm run build
             sudo cp -r dist/* /var/www/html/
             sudo systemctl daemon-reload
