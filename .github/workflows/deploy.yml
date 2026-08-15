@@ -43,7 +43,8 @@ jobs:
             cd backend
             ./mvnw clean package -DskipTests
             pkill -f 'java -jar' || true
-            nohup java -jar target/*.jar > app.log 2>&1 &
+            setsid java -jar target/*.jar > app.log 2>&1 &
+            sleep 2
             
             # 2. Build and update React Frontend
             cd ../frontend
