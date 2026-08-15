@@ -18,13 +18,13 @@ jobs:
       - name: Set server variables
         run: |
           if [ "${{ matrix.server }}" == "1" ]; then
-            echo "HOST=${{ secrets.EC2_HOST_1 }}" >> $GITHUB_ENV
-            echo "KEY_CONTENT<<EOF" >> $GITHUB_ENV
+            echo "HOST=${{ secrets.EC2_HOST_1 }}">> $GITHUB_ENV
+            echo "KEY_CONTENT<<EOF">> $GITHUB_ENV
             echo "${{ secrets.EC2_SSH_KEY_1 }}" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
           else
             echo "HOST=${{ secrets.EC2_HOST_2 }}" >> $GITHUB_ENV
-            echo "KEY_CONTENT<<EOF" >> $GITHUB_ENV
+            echo "KEY_CONTENT<<EOF">> $GITHUB_ENV
             echo "${{ secrets.EC2_SSH_KEY_2 }}" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
           fi
@@ -43,8 +43,9 @@ jobs:
             cd backend
             ./mvnw clean package -DskipTests
             pkill -f 'java -jar' || true
-            setsid java -jar target/*.jar > app.log 2>&1 &
-            sleep 2
+            nohup java -jar target/*.jar > app.log 2>&1 </dev/null &
+            disown
+            sleep 3
             
             # 2. Build and update React Frontend
             cd ../frontend
