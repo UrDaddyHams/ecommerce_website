@@ -9,19 +9,32 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - host: ${{ secrets.EC2_HOST_1 }}
-            key: ${{ secrets.EC2_SSH_KEY_1 }}
-          - host: ${{ secrets.EC2_HOST_2 }}
-            key: ${{ secrets.EC2_SSH_KEY_2 }}
+        server: [1, 2]
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set server variables
+        run: |
+          if [ "${{ matrix.server }}" == "1" ]; then
+            echo "HOST=${{ secrets.EC2_HOST_1 }}" >> $GITHUB_ENV
+            echo "KEY_CONTENT<<EOF" >> $GITHUB_ENV
+            echo "${{ secrets.EC2_SSH_KEY_1 }}" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          else
+            echo "HOST=${{ secrets.EC2_HOST_2 }}" >> $GITHUB_ENV
+            echo "KEY_CONTENT<<EOF" >> $GITHUB_ENV
+            echo "${{ secrets.EC2_SSH_KEY_2 }}" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          fi
+
       - name: Deploy via SSH to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ matrix.host }}
+          host: ${{ env.HOST }}
           username: ubuntu
-          key: ${{ matrix.key }}
+          key: ${{ env.KEY_CONTENT }}
           script: |
             cd ecommerce_website
             git pull origin main --rebase
