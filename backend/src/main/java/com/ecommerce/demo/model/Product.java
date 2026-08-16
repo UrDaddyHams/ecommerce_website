@@ -18,7 +18,7 @@ public class Product {
     private String productName;
 
     @Column(name = "price")
-    Double price;
+    private Double price;
 
     @Column(name = "stock")
     private Integer stock;
@@ -29,19 +29,21 @@ public class Product {
     @Column(name = "image_url", length = 500)
     private String imageUrl;
 
-    @Column(name = "id_category", insertable = false, updatable = false)
+    // FIX: Make primitive ID fields writable so incoming form IDs save to MySQL
+    @Column(name = "id_category")
     private Long idCategory;
 
-    @Column(name = "id_supplier", insertable = false, updatable = false)
+    @Column(name = "id_supplier")
     private Long idSupplier;
 
+    // FIX: Move insertable/updatable = false to the relationships to prevent mapping conflicts
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_category")
+    @JoinColumn(name = "id_category", insertable = false, updatable = false)
     @JsonIgnore
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_supplier")
+    @JoinColumn(name = "id_supplier", insertable = false, updatable = false)
     @JsonIgnore
     private Supplier supplier;
 

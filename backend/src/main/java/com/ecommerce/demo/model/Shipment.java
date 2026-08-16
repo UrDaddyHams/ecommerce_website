@@ -1,6 +1,7 @@
 package com.ecommerce.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -28,9 +29,8 @@ public class Shipment {
     @Column(name = "id_order", insertable = false, updatable = false)
     private Long idOrder;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_order")
-    @JsonIgnore
     private Order order;
 
     public Shipment() {}
@@ -63,4 +63,17 @@ public class Shipment {
 
     public Order getOrder() { return order; }
     public void setOrder(Order order) { this.order = order; }
+
+    @Transient
+    @JsonProperty("productName")
+    public String getProductName() {
+        if (order != null && order.getOrderItems() != null && !order.getOrderItems().isEmpty()) {
+            var firstItem = order.getOrderItems().get(0);
+            if (firstItem.getProduct() != null) {
+                return firstItem.getProduct().getProductName(); // Uses the correct getProductName() method
+            }
+        }
+        return "Book Item";
+    }
+
 }

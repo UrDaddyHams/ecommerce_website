@@ -4,6 +4,7 @@ import com.ecommerce.demo.model.Shipment;
 import com.ecommerce.demo.repository.ShipmentRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,23 +19,35 @@ public class ShipmentService {
         this.shipmentRepository = shipmentRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Shipment> getAllShipments() {
-        return shipmentRepository.findAll();
+        List<Shipment> shipments = shipmentRepository.findAllWithOrder();
+        initializeOrderItems(shipments);
+        return shipments;
     }
 
+    @Transactional(readOnly = true)
     public Optional<Shipment> getShipmentById(Long id) {
-        return shipmentRepository.findById(id);
+        Optional<Shipment> shipment = shipmentRepository.findById(id);
+        shipment.ifPresent(s -> initializeSingleShipment(s));
+        return shipment;
     }
 
+    @Transactional(readOnly = true)
     public Optional<Shipment> getShipmentByOrderId(Long idOrder) {
-        return shipmentRepository.findByIdOrder(idOrder);
+        Optional<Shipment> shipment = shipmentRepository.findByIdOrder(idOrder);
+        shipment.ifPresent(s -> initializeSingleShipment(s));
+        return shipment;
     }
 
+    @Transactional(readOnly = true)
     public List<Shipment> getShipmentsByUserId(Long userId) {
-        return shipmentRepository.findByOrder_Customer_IdCustomer(userId);
+        List<Shipment> shipments = shipmentRepository.findByOrder_Customer_IdCustomer(userId);
+        initializeOrderItems(shipments);
+        return shipments;
     }
 
-
+    @Transactional
     public Shipment saveShipment(Shipment shipment) {
         if (shipment.getShippingDate() == null) {
             shipment.setShippingDate(LocalDateTime.now());
@@ -42,6 +55,7 @@ public class ShipmentService {
         return shipmentRepository.save(shipment);
     }
 
+    @Transactional
     public Optional<Shipment> updateShipment(Long id, Shipment shipmentDetails) {
         return shipmentRepository.findById(id)
                 .map(existing -> {
@@ -64,6 +78,7 @@ public class ShipmentService {
                 });
     }
 
+    @Transactional
     public boolean deleteShipment(Long id) {
         if (shipmentRepository.existsById(id)) {
             try {
@@ -74,5 +89,24 @@ public class ShipmentService {
             }
         }
         return false;
+    }
+
+    // Helper methods to force Hibernate to initialize collections while transaction is active
+    private void initializeOrderItems(List<Shipment> shipments) {
+        for (Shipment shipment : shipments) {
+            initializeSingleShipment(shipment);
+        }
+    }
+
+    private void initializeSingleShipment(Shipment shipment) {
+        if (shipment.getOrder() != null && shipment.getOrder().getOrderItems() != null) {
+            // Accessing size() forces Hibernate to load all items from the database
+            shipment.getOrder().getOrderItems().size();
+            for (var item : shipment.getOrder().getOrderItems()) {
+                if (item.getProduct() != null) {
+                    item.getProduct().getProductName(); // Forces product details to load
+                }
+            }
+        }
     }
 }

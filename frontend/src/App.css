@@ -2284,3 +2284,59 @@ select option, .sort-dropdown option {
   border: 1px solid #504638 !important;
 }
 
+@media (max-width: 768px) {
+  /* 1. Reset header container to a clean column flow */
+  header, .navbar, .header-container, [class*="header"] {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    background: transparent !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* 2. Scale down the header banner image so it fits mobile screens */
+  .book-attic-header, header img, [class*="banner"] {
+    width: 92% !important;
+    max-width: 400px !important;
+    height: auto !important;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* 3. Group Menu and Cart into a neat side-by-side row below the banner */
+  header button,
+  .navbar button,
+  .cart-btn,
+  .menu-btn,
+  [class*="cart"],
+  [class*="menu"] {
+    position: static !important;
+    transform: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #4a3d30 !important;
+    color: #f5f2eb !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
+    margin: 5px !important;
+    cursor: pointer;
+  }
+
+  /* Wrapper for top buttons if you have one */
+  .header-actions, .nav-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+  }
+}

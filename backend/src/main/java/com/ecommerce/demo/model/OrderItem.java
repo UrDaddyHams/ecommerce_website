@@ -24,7 +24,7 @@ public class OrderItem {
     @Column(name = "id_product", insertable = false, updatable = false)
     private Long idProduct;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_order")
     @JsonIgnore
     private Order order;
