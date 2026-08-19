@@ -61,7 +61,7 @@ body {
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  margin-top: 0;       /* Changed margin-top from 72px to 0 */
+  margin-bottom: 2px;/* Changed margin-top from 72px to 0 */
 }
 
 /* ═════════════════════════════════════════════════════════════════════════
@@ -2285,58 +2285,94 @@ select option, .sort-dropdown option {
 }
 
 @media (max-width: 768px) {
-  /* 1. Reset header container to a clean column flow */
-  header, .navbar, .header-container, [class*="header"] {
-    position: relative !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    background: transparent !important;
-    padding: 10px 0 !important;
+  /* 1. Make the top banner larger, bolder, and framed nicely on mobile */
+  .full-width-banner,
+  .header-banner,
+  .banner-container {
     width: 100% !important;
-    height: auto !important;
+    padding: 2px !important;
+    margin-bottom: 0.5rem !important;
+    border: 2px solid #4e3d26 !important;
+    border-radius: 14px !important;
+    background-color: #f4ebd0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   }
 
-  /* 2. Scale down the header banner image so it fits mobile screens */
-  .book-attic-header, header img, [class*="banner"] {
-    width: 92% !important;
-    max-width: 400px !important;
-    height: auto !important;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto;
-  }
-
-  /* 3. Group Menu and Cart into a neat side-by-side row below the banner */
-  header button,
-  .navbar button,
-  .cart-btn,
-  .menu-btn,
-  [class*="cart"],
-  [class*="menu"] {
-    position: static !important;
-    transform: none !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background-color: #4a3d30 !important;
-    color: #f5f2eb !important;
-    border: none !important;
-    padding: 8px 16px !important;
+  .full-width-banner img,
+  .header-banner img,
+  .banner-container img {
+    width: 100% !important;
+    height: 110px !important;
+    object-fit: cover !important;
+    object-position: center !important;
     border-radius: 8px !important;
-    font-weight: 600 !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
-    margin: 5px !important;
-    cursor: pointer;
   }
 
-  /* Wrapper for top buttons if you have one */
-  .header-actions, .nav-buttons {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    margin-top: 10px !important;
+  /* 2. Reset navbar padding and remove bottom margin to close the gap */
+  .navbar {
+    position: relative !important;
+    padding-top: 5px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     width: 100% !important;
+    margin-bottom: 12px !important; /* Removes space below buttons */
+  }
+
+  .navbar-inner {
+    width: 100% !important;
+    padding: 0 1rem !important;
+  }
+
+  /* 3. Override the inline column style to force side-by-side buttons */
+  .navbar-inner > div {
+    flex-direction: row !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  /* 4. Make both buttons split the space 50/50 evenly */
+  .menu-toggle-btn {
+    flex: 1 !important;
+    width: 50% !important;
+    height: 48px !important;
+    padding: 0 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    border: 1px solid #4e3d26 !important;
+    background-color: #5a4c37 !important;
+    color: #e8d7b9 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 5. Remove top padding/margin from main content and catalog titles */
+  .main-content {
+    padding-top: 4px !important;
+    margin-top: 0 !important;
+  }
+
+  .main-content h1,
+  .main-content h2,
+  .product-catalog h1,
+  .product-catalog h2 {
+    margin-top: 0.25rem !important;
+    padding-top: 0 !important;
+  }
+
+  /* 6. Keep sidebar drawer text visible */
+  .sidebar-drawer,
+  .sidebar-drawer * {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .sidebar-drawer span,
+  .sidebar-drawer .nav-label,
+  .sidebar-link,
+  .sidebar-drawer a,
+  .sidebar-drawer button {
+    display: flex !important;
+    color: #2d3b2a !important;
   }
 }
