@@ -567,7 +567,7 @@ body {
   border-radius: var(--radius-md);
   font-family: inherit;
   font-size: 0.9rem;
-  color: #f4e187;              /* Input text font color */
+  color: #35301a;              /* Input text font color */
   background: #e4d0ad;         /* Input field background color */
   transition: all var(--transition-fast);
   outline: none;
