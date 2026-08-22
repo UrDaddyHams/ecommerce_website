@@ -72,7 +72,7 @@ export default function LoginPage({ onLogin }) {
         <div className="login-card">
           <div className="login-header">
             <div className="login-logo">🛒</div>
-            <h1>Readers</h1>
+            <h1>Book Attic</h1>
             <p>{isRegister ? 'Create your account' : 'Sign in to continue (User or Admin)'}</p>
           </div>
 
