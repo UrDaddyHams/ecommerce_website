@@ -1,4 +1,3 @@
-<img width="1440" height="861" alt="ln_post2" src="https://github.com/user-attachments/assets/e4ce6e95-301b-4b1b-9983-8d1446ccd344" />
 # The Book Attic
 
 An e-commerce web application built for an online bookstore. The platform provides a complete shopping experience, including user authentication, product catalog filtering, a shopping cart, shipment tracking, and profile management.
@@ -6,7 +5,8 @@ An e-commerce web application built for an online bookstore. The platform provid
 ## Screenshots
 
 ### Homepage and Catalog
-![Homepage](ln_post2.jpg)
+![Homepage](<img width="1440" height="861" alt="ln_post2" src="https://github.com/user-attachments/assets/e4ce6e95-301b-4b1b-9983-8d1446ccd344" />
+)
 ![Catalog](ln_post3.jpg)
 
 ### Navigation Drawer
